@@ -24,5 +24,11 @@ Leé `docs/claude-code-pc.md`, que tiene el paso a paso de la visita, cómo
 interpretar el JSON y qué reportar. El binario ya viene en el clon:
 `.\vetter-agent.exe version` tiene que decir `0.1.0`.
 
+## Después del inspect
+
+Implementá `pair` y `sync` en `agent/` siguiendo `docs/agent-implementation.md`.
+Los vectores de hash están ahí: no los inventes. No mapees a `tutors`, `pets`,
+`visits` ni `preventives`; eso vive en el Worker.
+
 Si el `.exe` no está o el repo está viejo: `git pull`. Si hay que rebuildear,
 `cd agent; GOOS=windows GOARCH=amd64 go build -o ../vetter-agent.exe .`.
