@@ -31,8 +31,8 @@ func writeTestDBF(t *testing.T, records [][]string, deleted []bool) string {
 	head := make([]byte, 32)
 	head[0] = 0x30
 	head[1], head[2], head[3] = 126, 10, 14
-	binary.LittleEndian.PutUint32(head[4:8], uint32(len(records)))
-	binary.LittleEndian.PutUint16(head[8:10], uint16(headerBytes))
+	binary.LittleEndian.PutUint32(head[4:8], uint32(len(records))) //nolint:gosec // el fixture entra en uint32
+	binary.LittleEndian.PutUint16(head[8:10], uint16(headerBytes)) //nolint:gosec // el fixture entra en uint16
 	binary.LittleEndian.PutUint16(head[10:12], uint16(recordBytes))
 	head[29] = 0x03
 
@@ -42,7 +42,7 @@ func writeTestDBF(t *testing.T, records [][]string, deleted []bool) string {
 		descriptor := make([]byte, 32)
 		copy(descriptor[0:11], field.name)
 		descriptor[11] = field.kind
-		descriptor[16] = byte(field.length)
+		descriptor[16] = byte(field.length) //nolint:gosec // el fixture entra en un byte
 		data = append(data, descriptor...)
 	}
 
@@ -74,6 +74,8 @@ func writeTestDBF(t *testing.T, records [][]string, deleted []bool) string {
 }
 
 func TestOpen(t *testing.T) {
+	t.Parallel()
+
 	path := writeTestDBF(t, [][]string{
 		{"1524", "2974112990"},
 		{"1525", "297 411-2990"},
@@ -115,6 +117,8 @@ func TestOpen(t *testing.T) {
 }
 
 func TestInspect(t *testing.T) {
+	t.Parallel()
+
 	path := writeTestDBF(t, [][]string{
 		{"1524", "2974112990"},
 		{"1525", "297 411-2990"},

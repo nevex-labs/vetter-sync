@@ -87,6 +87,30 @@ vetter-agent.exe inspect --dir "\\Srvarchvete01\c\vetter5\Datos" --out inspector
 Lee la estructura y cuenta sin escribir y sin sacar valores: nombres de campo,
 tipos, codepage, conteos, borrados y agregados de largos/separadores.
 
+## Calidad
+
+Desde `agent/`, antes de dar algo por terminado:
+
+```
+gofmt -l .
+go vet ./...
+golangci-lint run ./...
+go test -race ./...
+```
+
+El CI corre lo mismo en cada push. `.golangci.yml` es la lista; no la aflojes
+sin justificar. Lo que el linter no ve:
+
+- Sin `util/`, `common/` ni `helpers/`.
+- Sin interfaces con una sola implementación.
+- Sin globals ni `init()`.
+- Errores siempre con `%w` y contexto.
+- `slog` para logs; `fmt` solo en `main` para la CLI.
+- Tests table-driven, DBF sintéticos y `httptest` para el cliente HTTP. Nunca
+  `time.Sleep`.
+
+El detalle está en `docs/quality.md`.
+
 ## Evidencia
 
 Cada afirmación sobre Vetter se prueba contra la copia o queda como pregunta en

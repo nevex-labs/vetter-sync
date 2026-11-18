@@ -1,0 +1,59 @@
+version: "2"
+
+run:
+  timeout: 5m
+
+linters:
+  default: none
+  enable:
+    - errcheck
+    - errorlint
+    - wrapcheck
+    - govet
+    - staticcheck
+    - gosec
+    - noctx
+    - bodyclose
+    - sqlclosecheck
+    - rowserrcheck
+    - contextcheck
+    - gocritic
+    - revive
+    - unused
+    - ineffassign
+    - cyclop
+    - dupl
+    - forbidigo
+    - depguard
+    - testifylint
+    - paralleltest
+
+  settings:
+    cyclop:
+      max-complexity: 15
+
+    depguard:
+      rules:
+        main:
+          list-mode: strict
+          allow:
+            - $gostd
+            - vetter-sync/agent
+
+    forbidigo:
+      forbid:
+        - pattern: '^panic\(.*$'
+          msg: "devolvé el error; panic solo en main si no hay forma de seguir"
+
+    gosec:
+      excludes:
+        # Las rutas vienen de la configuración de la PC, no de input externo.
+        - G304
+
+formatters:
+  enable:
+    - gofmt
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0

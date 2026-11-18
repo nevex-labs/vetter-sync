@@ -20,6 +20,8 @@ Agente read-only Vetter 5 → Cloudflare Worker + D1/R2.
 - [docs/pc-runbook.md](./docs/pc-runbook.md) — instalar y operar en la PC.
 - [docs/informe-visita.md](./docs/informe-visita.md) — plantilla del informe.
 - [docs/agent-implementation.md](./docs/agent-implementation.md) — parser, hash y sync.
+- [docs/quality.md](./docs/quality.md) — gates y reglas anti-slop de Go.
+- [docs/release.md](./docs/release.md) — tags, firma y auto-update.
 - [docs/open-questions.md](./docs/open-questions.md) — la checklist de la
   visita.
 

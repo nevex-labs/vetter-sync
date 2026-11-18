@@ -34,6 +34,7 @@ func ParseStat(spec string) (StatSpec, error) {
 	return StatSpec{Table: parts[0], Field: parts[1]}, nil
 }
 
+// Report es el JSON completo de una visita.
 type Report struct {
 	GeneratedAt string      `json:"generated_at"`
 	Dir         string      `json:"dir"`
@@ -41,11 +42,13 @@ type Report struct {
 	Errors      []FileError `json:"errors"`
 }
 
+// FileError es un DBF que no se pudo leer.
 type FileError struct {
 	File  string `json:"file"`
 	Error string `json:"error"`
 }
 
+// File es un DBF con su estructura y agregados.
 type File struct {
 	Name     string      `json:"name"`
 	Size     int64       `json:"size"`
@@ -57,11 +60,13 @@ type File struct {
 	Stats    []StatBlock `json:"stats"`
 }
 
+// Memo es el .FPT asociado a un DBF.
 type Memo struct {
 	Name string `json:"name"`
 	Size int64  `json:"size"`
 }
 
+// Header es el bloque de 32 bytes del DBF.
 type Header struct {
 	Version        string `json:"version"`
 	UpdatedAt      string `json:"updated_at"`
@@ -71,6 +76,7 @@ type Header struct {
 	Encoding       string `json:"encoding"`
 }
 
+// Records compara el header con el tamaño real.
 type Records struct {
 	Header   int  `json:"header"`
 	Computed int  `json:"computed_from_size"`
@@ -78,6 +84,7 @@ type Records struct {
 	Deleted  int  `json:"deleted"`
 }
 
+// Field es un campo del DBF.
 type Field struct {
 	Name     string `json:"name"`
 	Type     string `json:"type"`
@@ -85,6 +92,7 @@ type Field struct {
 	Decimals int    `json:"decimals"`
 }
 
+// StatBlock son los agregados de un campo.
 type StatBlock struct {
 	Field         string         `json:"field"`
 	Scanned       int            `json:"scanned"`
@@ -100,12 +108,12 @@ type StatBlock struct {
 func Build(dir string, specs []StatSpec) (Report, error) {
 	abs, err := filepath.Abs(dir)
 	if err != nil {
-		return Report{}, err
+		return Report{}, fmt.Errorf("ruta absoluta: %w", err)
 	}
 
 	info, err := os.Stat(abs)
 	if err != nil {
-		return Report{}, err
+		return Report{}, fmt.Errorf("stat %s: %w", abs, err)
 	}
 
 	if !info.IsDir() {
@@ -130,7 +138,7 @@ func Build(dir string, specs []StatSpec) (Report, error) {
 		return nil
 	})
 	if err != nil {
-		return Report{}, err
+		return Report{}, fmt.Errorf("recorrer %s: %w", abs, err)
 	}
 
 	sort.Strings(paths)
@@ -175,7 +183,7 @@ func Build(dir string, specs []StatSpec) (Report, error) {
 func buildFile(table *dbf.Table, specs []StatSpec, matched map[string]bool) (File, error) {
 	info, err := os.Stat(table.Path)
 	if err != nil {
-		return File{}, err
+		return File{}, fmt.Errorf("stat %s: %w", table.Path, err)
 	}
 
 	base := strings.TrimSuffix(filepath.Base(table.Path), filepath.Ext(table.Path))
@@ -224,7 +232,7 @@ func buildFile(table *dbf.Table, specs []StatSpec, matched map[string]bool) (Fil
 
 		stats, err := table.Inspect(spec.Field)
 		if err != nil {
-			return File{}, err
+			return File{}, fmt.Errorf("inspeccionar %s.%s: %w", base, spec.Field, err)
 		}
 
 		matched[strings.ToUpper(spec.Table)] = true
@@ -281,8 +289,12 @@ func toStringMap(values map[int]int) map[string]int {
 func Write(path string, report Report) error {
 	data, err := json.MarshalIndent(report, "", "  ")
 	if err != nil {
-		return err
+		return fmt.Errorf("serializar reporte: %w", err)
 	}
 
-	return os.WriteFile(path, append(data, '\n'), 0o600)
+	if err := os.WriteFile(path, append(data, '\n'), 0o600); err != nil {
+		return fmt.Errorf("escribir %s: %w", path, err)
+	}
+
+	return nil
 }

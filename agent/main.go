@@ -23,6 +23,7 @@ import (
 // Se pisan en el release con -ldflags.
 var version = "0.1.0"
 
+//nolint:unused // la pisa el release con -ldflags
 var updatePublicKey = ""
 
 func main() {
@@ -71,7 +72,7 @@ func inspect(args []string) {
 	var stats statList
 
 	flags.Var(&stats, "stat", "agregados de un campo: TABLA.CAMPO (repetible)")
-	flags.Parse(args)
+	_ = flags.Parse(args)
 
 	if *dir == "" {
 		fmt.Fprintln(os.Stderr, "falta --dir")

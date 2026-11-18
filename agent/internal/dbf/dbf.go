@@ -92,13 +92,13 @@ func Encoding(driver byte) string {
 func Open(path string) (*Table, error) {
 	file, err := os.Open(path)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("abrir %s: %w", path, err)
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	info, err := file.Stat()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("stat %s: %w", path, err)
 	}
 
 	head, err := readHeader(file)
@@ -202,7 +202,7 @@ func scanDeleted(file *os.File, table *Table) error {
 	}
 
 	if _, err := file.Seek(int64(head.HeaderBytes), io.SeekStart); err != nil {
-		return err
+		return fmt.Errorf("seek %s: %w", table.Path, err)
 	}
 
 	reader := bufio.NewReaderSize(file, 64*1024)
@@ -262,12 +262,12 @@ func (t *Table) Inspect(fieldName string) (Stats, error) {
 
 	file, err := os.Open(t.Path)
 	if err != nil {
-		return Stats{}, err
+		return Stats{}, fmt.Errorf("abrir %s: %w", t.Path, err)
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	if _, err := file.Seek(int64(t.Header.HeaderBytes), io.SeekStart); err != nil {
-		return Stats{}, err
+		return Stats{}, fmt.Errorf("seek %s: %w", t.Path, err)
 	}
 
 	reader := bufio.NewReaderSize(file, 64*1024)
@@ -286,48 +286,51 @@ func (t *Table) Inspect(fieldName string) (Stats, error) {
 			break
 		}
 
-		raw := record[offset : offset+length]
-		value := strings.TrimRight(string(raw), "\x00 ")
-
-		stats.Scanned++
-
-		if value == "" {
-			continue
-		}
-
-		stats.NonEmpty++
-		stats.Lengths[len(value)]++
-
-		digits := 0
-		for i := 0; i < len(value); i++ {
-			switch value[i] {
-			case ' ':
-				stats.HasSpace++
-			case ',':
-				stats.HasComma++
-			case '/':
-				stats.HasSlash++
-			case '+':
-				stats.HasPlus++
-			case '(':
-				stats.HasParen++
-			case '-':
-				stats.HasDash++
-			}
-
-			if value[i] >= '0' && value[i] <= '9' {
-				digits++
-			}
-		}
-
-		if digits == len(value) {
-			stats.DigitsOnly++
-		}
-
-		if at := strings.IndexByte(value, '/'); at >= 0 {
-			stats.PrefixLengths[at]++
-		}
+		analyze(&stats, strings.TrimRight(string(record[offset:offset+length]), "\x00 "))
 	}
 
 	return stats, nil
+}
+
+// analyze suma un valor a los agregados sin guardarlo.
+func analyze(stats *Stats, value string) {
+	stats.Scanned++
+
+	if value == "" {
+		return
+	}
+
+	stats.NonEmpty++
+	stats.Lengths[len(value)]++
+
+	digits := 0
+
+	for i := 0; i < len(value); i++ {
+		switch value[i] {
+		case ' ':
+			stats.HasSpace++
+		case ',':
+			stats.HasComma++
+		case '/':
+			stats.HasSlash++
+		case '+':
+			stats.HasPlus++
+		case '(':
+			stats.HasParen++
+		case '-':
+			stats.HasDash++
+		}
+
+		if value[i] >= '0' && value[i] <= '9' {
+			digits++
+		}
+	}
+
+	if digits == len(value) {
+		stats.DigitsOnly++
+	}
+
+	if at := strings.IndexByte(value, '/'); at >= 0 {
+		stats.PrefixLengths[at]++
+	}
 }

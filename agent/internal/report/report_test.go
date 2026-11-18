@@ -17,8 +17,8 @@ func writeDBF(t *testing.T, dir, name string, phones []string) {
 	head := make([]byte, 32)
 	head[0] = 0x30
 	head[1], head[2], head[3] = 126, 10, 14
-	binary.LittleEndian.PutUint32(head[4:8], uint32(len(phones)))
-	binary.LittleEndian.PutUint16(head[8:10], uint16(headerBytes))
+	binary.LittleEndian.PutUint32(head[4:8], uint32(len(phones)))  //nolint:gosec // el fixture entra en uint32
+	binary.LittleEndian.PutUint16(head[8:10], uint16(headerBytes)) //nolint:gosec // el fixture entra en uint16
 	binary.LittleEndian.PutUint16(head[10:12], uint16(recordBytes))
 	head[29] = 0x03
 
@@ -31,7 +31,7 @@ func writeDBF(t *testing.T, dir, name string, phones []string) {
 		descriptor := make([]byte, 32)
 		copy(descriptor[0:11], field.name)
 		descriptor[11] = 'C'
-		descriptor[16] = byte(field.length)
+		descriptor[16] = byte(field.length) //nolint:gosec // el fixture entra en un byte
 		data = append(data, descriptor...)
 	}
 
@@ -61,6 +61,8 @@ func writeDBF(t *testing.T, dir, name string, phones []string) {
 }
 
 func TestBuild(t *testing.T) {
+	t.Parallel()
+
 	dir := t.TempDir()
 	writeDBF(t, dir, "CLIENTES.DBF", []string{"2974112990", "297 411-2990", ""})
 
@@ -101,6 +103,8 @@ func TestBuild(t *testing.T) {
 }
 
 func TestBuildAvisaStatSinTabla(t *testing.T) {
+	t.Parallel()
+
 	dir := t.TempDir()
 	writeDBF(t, dir, "CLIENTES.DBF", []string{"2974112990"})
 
@@ -115,6 +119,8 @@ func TestBuildAvisaStatSinTabla(t *testing.T) {
 }
 
 func TestWrite(t *testing.T) {
+	t.Parallel()
+
 	dir := t.TempDir()
 	writeDBF(t, dir, "CLIENTES.DBF", []string{"2974112990"})
 
@@ -145,6 +151,8 @@ func TestWrite(t *testing.T) {
 }
 
 func TestParseStat(t *testing.T) {
+	t.Parallel()
+
 	spec, err := ParseStat("CLIENTES.TELEFONO")
 	if err != nil || spec.Table != "CLIENTES" || spec.Field != "TELEFONO" {
 		t.Fatalf("spec = %+v, err = %v", spec, err)
