@@ -3,7 +3,7 @@
 > Generado por `veterinaria-gachen/scripts/vetter-contract.mjs`. **No editar a
 > mano**: se pisa. Regenerar en `veterinaria-gachen` con `pnpm vetter:contract`.
 >
-> Origen: `veterinaria-gachen@3213f53729df` (2026-11-18).
+> Origen: `veterinaria-gachen@28c8d9467776` (2026-11-18).
 > Versión del contrato: **3**.
 
 Este documento es lo que el agente de la PC necesita. El mapeo de las filas
@@ -115,7 +115,7 @@ vez que el agente lo mandó.
 
 ```sql
 CREATE TABLE vetter_rows (
-  tabla TEXT NOT NULL,
+  source_table TEXT NOT NULL,
   vetter_id TEXT NOT NULL,
   hash TEXT NOT NULL,
   data_json TEXT NOT NULL,
@@ -123,8 +123,8 @@ CREATE TABLE vetter_rows (
   received_at TEXT NOT NULL,
   applied_at TEXT,
   status TEXT NOT NULL DEFAULT 'pendiente'
-    CHECK (status IN ('pendiente', 'aplicado', 'ambiguo')),
-  PRIMARY KEY (tabla, vetter_id)
+    CHECK (status IN ('pendiente', 'aplicado', 'ambiguo')), reason TEXT,
+  PRIMARY KEY (source_table, vetter_id)
 ) WITHOUT ROWID;
 ```
 
