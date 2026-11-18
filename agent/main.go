@@ -20,7 +20,10 @@ import (
 	"vetter-sync/agent/internal/report"
 )
 
-const version = "0.1.0"
+// Se pisan en el release con -ldflags.
+var version = "0.1.0"
+
+var updatePublicKey = ""
 
 func main() {
 	if len(os.Args) < 2 {

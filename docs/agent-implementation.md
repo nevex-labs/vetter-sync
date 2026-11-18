@@ -135,6 +135,32 @@ Requisito: **anda solo, siempre, y cuando falla se ve.**
 - Un error del servidor (400, 413, 500) se loguea con el código; el panel
   además lo ve por el heartbeat. El 401 corta la corrida.
 
+## Auto-update
+
+Objetivo: publicamos un release desde casa y la PC se actualiza sola, sin que
+nadie la toque ni abra Claude Code.
+
+- Manifiesto: `https://github.com/nevex-labs/vetter-sync/releases/latest/download/manifest.json`
+  con `{version, url, sha256, published_at, min_contract}`.
+- Firma: ed25519 sobre los bytes exactos del manifiesto, en `manifest.sig`. La
+  clave pública se compila con `-X main.updatePublicKey=...`; si está vacía,
+  auto-update deshabilitado (falla cerrado).
+- Chequeo: una vez cada 24 h, antes del sync. No cada 5 minutos.
+- Descarga a `updates/vetter-agent-<version>.exe` y verifica **sha256 y firma**
+  antes de tocar nada.
+- Swap al inicio de la corrida siguiente: renombrar el actual a `.old` y mover
+  el staged al nombre real. Nunca sobrescribir el binario en ejecución.
+- Rollback: si la versión nueva no marca un run OK en 3 corridas, restaurar
+  `.old` y loguear. El `.old` se conserva hasta el primer run OK.
+- Contrato: si `min_contract` es mayor que el `contract` del `GET`, no manda y
+  reporta `agent_error`; el update se puede hacer igual.
+- Logs: `update.check`, `update.available`, `update.downloaded`,
+  `update.verified`, `update.staged`, `update.swapped`, `update.rollback`, con
+  las dos versiones.
+- `status` muestra versión actual, staged, último chequeo y fallas.
+- El heartbeat manda `agent_version`; el panel muestra qué versión corre cada
+  PC. Ese campo va en el contrato (paso siguiente en gachen).
+
 ## Tests
 
 - DBF sintéticos (no de la clínica): header, codepage, borrados, fechas.

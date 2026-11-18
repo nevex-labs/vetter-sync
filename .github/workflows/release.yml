@@ -1,0 +1,70 @@
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: agent
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: agent/go.mod
+
+      - name: Tests
+        run: go test ./...
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Build Windows
+        shell: bash
+        run: |
+          GOOS=windows GOARCH=amd64 go build -trimpath \
+            -ldflags "-s -w -X main.version=${GITHUB_REF_NAME#v} -X main.updatePublicKey=${{ vars.UPDATE_PUBLIC_KEY }}" \
+            -o ../vetter-agent.exe .
+
+      - name: Manifest
+        shell: bash
+        run: |
+          SHA=$(sha256sum ../vetter-agent.exe | cut -d' ' -f1)
+          VERSION="${GITHUB_REF_NAME#v}"
+          URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}/vetter-agent.exe"
+          jq -n --arg v "$VERSION" --arg u "$URL" --arg s "$SHA" --arg d "$(date -u +%FT%TZ)" \
+            '{version:$v,url:$u,sha256:$s,published_at:$d,min_contract:2}' > ../manifest.json
+          cat ../manifest.json
+
+      - name: Firmar manifiesto
+        shell: bash
+        env:
+          UPDATE_SIGNING_KEY: ${{ secrets.UPDATE_SIGNING_KEY }}
+        run: |
+          printf '%s' "$UPDATE_SIGNING_KEY" > ../signing.pem
+          openssl pkeyutl -sign -rawin -inkey ../signing.pem -in ../manifest.json -out ../manifest.sig
+          rm ../signing.pem
+
+      - name: Verificar firma
+        shell: bash
+        run: |
+          printf '%s' "${{ vars.UPDATE_PUBLIC_KEY }}" | base64 -d > ../pub.der
+          openssl pkeyutl -verify -pubin -keyform DER -inkey ../pub.der -rawin \
+            -in ../manifest.json -sigfile ../manifest.sig
+
+      - name: Publicar
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            ../vetter-agent.exe ../manifest.json ../manifest.sig \
+            --title "vetter-agent ${GITHUB_REF_NAME#v}" \
+            --notes "Release ${GITHUB_REF_NAME}. El agente lo toma en la próxima corrida."
