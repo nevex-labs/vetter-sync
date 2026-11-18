@@ -60,7 +60,9 @@ jobs:
       - name: Verificar firma
         shell: bash
         run: |
-          printf '%s' "${{ vars.UPDATE_PUBLIC_KEY }}" | base64 -d > ../pub.der
+          # SPKI DER de una clave Ed25519: prefijo fijo + los 32 bytes.
+          printf '302a300506032b6570032100' | xxd -r -p > ../pub.der
+          printf '%s' "${{ vars.UPDATE_PUBLIC_KEY }}" | base64 -d >> ../pub.der
           openssl pkeyutl -verify -pubin -keyform DER -inkey ../pub.der -rawin \
             -in ../manifest.json -sigfile ../manifest.sig
 
