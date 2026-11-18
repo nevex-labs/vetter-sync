@@ -1,5 +1,8 @@
 # AGENTS.md — vetter-sync
 
+Si sos Claude Code en la PC de la clínica, leé `CLAUDE.md` y
+`docs/claude-code-pc.md`: tienen el paso a paso de la única visita.
+
 Agente read-only que copia la base de Vetter 5 de la PC de la clínica y la
 empuja al Worker `veterinariagachens`. Este repo se clona en esa PC, donde no
 hay `wrangler` ni acceso al repo del Worker.

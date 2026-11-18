@@ -10,12 +10,15 @@ Agente read-only Vetter 5 → Cloudflare Worker + D1/R2.
 
 ## Docs
 
+- [CLAUDE.md](./CLAUDE.md) — para Claude Code en la PC de la clínica.
 - [AGENTS.md](./AGENTS.md) — reglas duras para trabajar en este repo.
 - [docs/contract.md](./docs/contract.md) — **generado** desde el Worker. Qué
   mandar y cómo. No editar a mano.
 - [docs/vetter-schema.md](./docs/vetter-schema.md) — DBF: confirmado vs
   hipótesis.
+- [docs/claude-code-pc.md](./docs/claude-code-pc.md) — la visita, paso a paso.
 - [docs/pc-runbook.md](./docs/pc-runbook.md) — instalar y operar en la PC.
+- [docs/informe-visita.md](./docs/informe-visita.md) — plantilla del informe.
 - [docs/open-questions.md](./docs/open-questions.md) — la checklist de la
   visita.
 
