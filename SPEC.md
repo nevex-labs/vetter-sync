@@ -10,7 +10,7 @@ Traer los datos que hoy solo están en Vetter 5 a nuestro sistema, sin pagar el 
 ## 2. No-objetivos
 
 - No escribir nunca en DBF/FPT de Vetter.
-- No reemplazar Vetter, no turnos bidireccionales.
+- No reemplazar Vetter en esta fase, no turnos bidireccionales. Deprecarlo queda como fase futura, ver `docs/adr/001-migracion-gradual-deprecar-vetter.md`.
 - No API local en la PC, no abrir puertos, no túnel.
 - No conversación con Vetter Sistemas en esta fase.
 
@@ -96,3 +96,4 @@ Limitación: ediciones sin cambio de fecha solo se ven por hash. Borrados lógic
 3. **Prototipo lector**: Go lee copia, imprime conteos sin PII. Valida `CODIGOPACI`, teléfonos, `FECHA_REVA`.
 4. **ADR + endpoint + `vacunas/estudios` migrations**.
 5. **Piloto**: 1 semana solo diff, sin PDFs. Después PDFs chicos, resto no.
+6. **Futura, sin fecha**: migración gradual para deprecar Vetter. Ver `docs/adr/001-migracion-gradual-deprecar-vetter.md`. Se reevalúa al cerrar el piloto.
