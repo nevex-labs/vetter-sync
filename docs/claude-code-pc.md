@@ -6,7 +6,7 @@ existen en este binario. Lo que sigue después se hace en esta misma máquina.
 
 ## Antes de tocar nada
 
-1. `git log --oneline -1` y `.\vetter-agent.exe version` → `vetter-agent 0.1.0`.
+1. `git log --oneline -1` y `.\vetter-agent.exe version` → `vetter-agent 0.1.1`.
    Si el exe no está, `git pull`; si hay que rebuildear:
    `cd agent; GOOS=windows GOARCH=amd64 go build -o ../vetter-agent.exe .`
 2. **Conectividad**:
