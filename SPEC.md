@@ -21,7 +21,7 @@ PC vete (Windows)                    Cloudflare
 Z:\vetter5\Datos (prod)              Worker veterinariagachens
   │ copia RO → %TEMP%                  │
   ▼                                    ▼
-vetter-agent.exe (Go, tarea) ──HTTPS POST──► POST /sync/vetter
+vetter-agent.exe (Go, tarea) ──HTTPS POST──► POST /api/sync/vetter
   snapshot.db local                      │ valida token, upsert D1, sube R2
                                          ▼
                                     D1 + R2 (bot/panel leen de acá)
@@ -38,15 +38,17 @@ Fuente: diagnóstico remoto del 15/10 (hipótesis a confirmar con la copia). Des
 
 | Vetter (hipótesis) | Nuestro D1 | Notas |
 |---|---|---|
-| `CLIENTES.CODIGO, NOMBRE, TELEFONO(40c texto libre)` | `conversations.phone + contact_name`, `pets.tutor_phone` | Teléfono texto libre, varios números por campo. Normalizar. No hay tabla `tutores` por ADR-003. |
-| `PACIENTES.CODIGOPACI texto tipo 1524/2` | `pets.vetter_id UNIQUE` | Llave estable, ya reservada como costura de importación. |
-| `PACIENTES nombre, especie, raza, sexo` | `pets.nombre, nombre_norm, especie` | `nombre_norm = lower(trim)`. Sin UNIQUE en `(tutor_phone, nombre_norm)` por homónimos. |
-| `VACUNAS.FECHA_REVA` próxima dosis | tabla nueva `vacunas` → `pets.id` | `AVISADO` no se usa = oportunidad recordatorio WhatsApp. |
-| `VISITAS` bitácora con fecha/hora | detección de cambios + futura `historia` | Única tabla con timestamp por evento. |
-| `ADJUNTOS` + PDFs/JPGs | `attachments` + R2 `veterinaria-gachen-files` | `kind`: `estudios, radiografias, imagenes`. Vínculo best-effort `pet_id nullable`. |
+| `CLIENTES.CODIGO, NOMBRE, TELEFONO(40c texto libre)` | `tutors` + `tutor_phones` | Un tutor por cliente y un teléfono por cada número válido. No toca `conversations` ni `contact_name` (ADR-0013). |
+| `PACIENTES.CODIGOPACI texto tipo 1524/2` | `pets.vetter_id UNIQUE` | Llave estable. Hipótesis a confirmar: el prefijo es el código de cliente. |
+| `PACIENTES nombre, especie, raza, sexo` | `pets.nombre, nombre_norm, especie, raza` | `nombre_norm = lower(trim)`. Sin UNIQUE por homónimos. Sexo y nacimiento esperan el schema confirmado. |
+| `VACUNAS.FECHA_REVA` próxima dosis | `preventives.proxima_dosis` | `AVISADO` no se usa. Importar no avisa: el recordatorio del ADR-0015 no está implementado. |
+| `VISITAS` bitácora con fecha/hora | `visits` + `visit_notes` | Única tabla con timestamp por evento. Las notas son append-only; la deduplicación va en el paso 4. |
+| `ADJUNTOS` + PDFs/JPGs | `attachments.r2_key` + R2 `veterinaria-gachen-files` | Layout `vetter/<tabla>/<vetter_id>/<nombre>`. Reimportar no duplica (`r2_key` UNIQUE). |
 | Turnos Vetter | nada (0 registros según reporte) | Nuestro bot es el sistema de turnos, sin conflicto. |
 
-Tablas clínicas nuevas (`vacunas, antiparasitarios, estudios`) referencian `pets.id`, nunca strings (ADR-004).
+Tablas clínicas nuevas (`preventives`, `attachments`) referencian `pets.id`, nunca strings (ADR-004).
+
+**El agente no mapea.** Manda las filas crudas de la lista blanca con su hash y el mapeo vive en el Worker (ADR-0016). Así se puede rehacer sin volver a la PC.
 
 ## 5. Cómo detecta cambios (sin fecha de modificación)
 
@@ -63,15 +65,20 @@ Limitación: ediciones sin cambio de fecha solo se ven por hash. Borrados lógic
 
 - Un `.exe` único, sin runtime. Corre como Tarea Programada cada 5 min.
 - Config: `Z_PATH, COPY_DIR, SNAPSHOT_DB, ENDPOINT, TOKEN, INSTALL_ID`. Token en archivo con ACL solo al usuario servicio.
-- Flujo: mira `mtime` → copia con share de solo lectura → parse DBF → diff vs snapshot → `POST /sync/vetter` con lotes de 200-500 filas → reintenta con backoff, acumula offline.
-- Nunca lee de `C:\Users\...\OneDrive\BKP Vetter5` (réplica divergente). Siempre `Z:`.
+- **`Z_PATH` va por UNC** (`\\Srvarchvete01\c\vetter5\Datos`), no por letra de unidad: una tarea que corre como SYSTEM o "sin que el usuario inicie sesión" no ve `Z:`, que es por sesión.
+- Flujo: mira `mtime` → copia con share de solo lectura → parsea DBF → arma el hash de cada fila → diff vs snapshot → `POST /api/sync/vetter` con lotes de hasta 200 filas → reintenta con backoff, acumula offline. No mapea ni manda PII en los logs.
+- Nunca lee de `C:\Users\...\OneDrive\BKP Vetter5` (réplica divergente). Siempre `Z:` o su UNC.
 - Logs locales rotados, sin PII (solo conteos + `vetter_id`).
 
-## 7. Endpoint Worker `POST /sync/vetter`
+## 7. Endpoint Worker `POST /api/sync/vetter`
 
-- Auth: `Authorization: Bearer <token por instalación>`. Rate limit simple.
-- Valida, upsert por `vetter_id`, idempotente. Nunca borra.
-- PDFs: el agente sube directo a R2 con URL firmada o manda bytes en lote chico. Layout: `<categoria>/<telefono>/<AAAA-MM>/...`.
+- Vive en el Worker `veterinariagachens`, no en uno aparte (ADR-0016): D1 y R2 están ahí.
+- Auth: `Authorization: Bearer <token por instalación>` (`VETTER_SYNC_TOKEN`) comparado con `safeEqual`. Sin secret configurado responde 401.
+- Cuerpo: `{ install_id, rows: [{ tabla, vetter_id, hash, deleted, data }] }`, hasta 200 filas y 1 MB.
+- Guarda en `vetter_rows` (zona de llegada) y **no proyecta** en el paso 1. Respuesta `{received, unchanged, changed, duplicated, applied, ambiguous, rejected}`; `applied` y `ambiguous` quedan en 0 hasta el paso 3.
+- Idempotente: si el hash no cambió, no escribe ni mueve `received_at`. Nunca borra.
+- Lista blanca: `CLIENTES`, `PACIENTES`, `VACUNAS`, `VISITAS`, `ADJUNTOS`. El resto se rechaza y se cuenta.
+- PDFs: el agente sube directo a R2 con URL firmada o manda bytes en lote chico. Layout: `vetter/<tabla>/<vetter_id>/<nombre>`.
 - Volcado inicial 60k registros: repartir en días, lotes chicos. Free tiene 50 subrequests/invocación. Si se pasa, subir a pago o bajar `FILES_PER_RUN`.
 
 ## 8. Operación y riesgos
