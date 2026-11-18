@@ -15,8 +15,10 @@ hay `wrangler` ni acceso al repo del Worker.
 - **Las unidades mapeadas son por sesión.** Una tarea programada que corre como
   SYSTEM o "sin que el usuario inicie sesión" no ve `Z:`. Usar el UNC
   (`\\Srvarchvete01\c\vetter5\Datos`).
-- **El token no entra al repo ni a una carpeta sincronizada con OneDrive.** Va
-  en un archivo aparte con ACL solo para la cuenta de la tarea.
+- **El secreto de instalación no entra al repo ni a una carpeta sincronizada
+  con OneDrive.** Se guarda una vez con `vetter-agent pair` y vive en el
+  almacén de la cuenta que corre la tarea (Credential Manager o DPAPI). La
+  cuenta del pareo y la de la tarea tienen que ser la misma.
 - **Logs sin PII.** Conteos y `vetter_id`; nunca nombres, teléfonos ni notas.
 
 ## Qué hace y qué no
@@ -38,6 +40,13 @@ docs/open-questions.md  lo que falta cerrar en la visita
 SPEC.md                 el diseño y sus fases
 ```
 
+## Pareo
+
+`vetter-agent pair` se corre **una vez**, con la misma cuenta que va a usar la
+tarea programada, y guarda el secreto. Después cada corrida se autentica sola:
+no hay token que rotar a mano. Si se revoca desde el panel, la PC deja de
+sincronizar y hay que crear un dispositivo nuevo. Ver `docs/pc-runbook.md`.
+
 ## Contrato
 
 `docs/contract.md` sale de `pnpm vetter:contract` en `veterinaria-gachen`. Si
@@ -47,8 +56,11 @@ acá. La cabecera trae el commit de origen.
 Antes de mandar, el agente puede verificar contra qué habla:
 
 ```
-GET /api/sync/vetter  →  { "ok": true, "contract": 1 }
+GET /api/sync/vetter  →  { "ok": true, "contract": 2 }
 ```
+
+El GET es público: sirve para probar conectividad desde la PC sin credencial.
+La credencial se prueba con un POST de lote vacío.
 
 Si `contract` no es el que el binario espera, no mandar: es más barato fallar
 que escribir filas en un contrato que no se entiende.

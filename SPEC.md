@@ -22,7 +22,7 @@ Z:\vetter5\Datos (prod)              Worker veterinariagachens
   │ copia RO → %TEMP%                  │
   ▼                                    ▼
 vetter-agent.exe (Go, tarea) ──HTTPS POST──► POST /api/sync/vetter
-  snapshot.db local                      │ valida token, upsert D1, sube R2
+  snapshot.db local                      │ valida credencial, upsert D1, sube R2
                                          ▼
                                     D1 + R2 (bot/panel leen de acá)
 ```
@@ -64,16 +64,16 @@ Limitación: ediciones sin cambio de fecha solo se ven por hash. Borrados lógic
 ## 6. Agente Go (spec)
 
 - Un `.exe` único, sin runtime. Corre como Tarea Programada cada 5 min.
-- Config: `Z_PATH, COPY_DIR, SNAPSHOT_DB, ENDPOINT, TOKEN, INSTALL_ID`. Token en archivo con ACL solo al usuario servicio.
+- Config: `Z_PATH, COPY_DIR, SNAPSHOT_DB, ENDPOINT, INSTALL_ID`. El secreto de instalación se guarda con `pair` en el almacén de credenciales de la cuenta de la tarea, no en la config.
 - **`Z_PATH` va por UNC** (`\\Srvarchvete01\c\vetter5\Datos`), no por letra de unidad: una tarea que corre como SYSTEM o "sin que el usuario inicie sesión" no ve `Z:`, que es por sesión.
-- Flujo: mira `mtime` → copia con share de solo lectura → parsea DBF → arma el hash de cada fila → diff vs snapshot → `POST /api/sync/vetter` con lotes de hasta 200 filas → reintenta con backoff, acumula offline. No mapea ni manda PII en los logs.
+- Flujo: mira `mtime` → copia con share de solo lectura → parsea DBF → arma el hash de cada fila → diff vs snapshot → `POST /api/sync/vetter` con lotes de hasta 200 filas (uno vacío si no hay cambios, como heartbeat) → reintenta con backoff, acumula offline. No mapea ni manda PII en los logs.
 - Nunca lee de `C:\Users\...\OneDrive\BKP Vetter5` (réplica divergente). Siempre `Z:` o su UNC.
 - Logs locales rotados, sin PII (solo conteos + `vetter_id`).
 
 ## 7. Endpoint Worker `POST /api/sync/vetter`
 
 - Vive en el Worker `veterinariagachens`, no en uno aparte (ADR-0016): D1 y R2 están ahí.
-- Auth: `Authorization: Bearer <token por instalación>` (`VETTER_SYNC_TOKEN`) comparado con `safeEqual`. Sin secret configurado responde 401.
+- Auth: `Authorization: Bearer <secreto de instalación>` (`vgs_…`), creado desde el panel y revocable ahí. Sin credencial válida responde 401. `GET` es público y devuelve `{ok, contract}`.
 - Cuerpo: `{ install_id, rows: [{ tabla, vetter_id, hash, deleted, data }] }`, hasta 200 filas y 1 MB.
 - Guarda en `vetter_rows` (zona de llegada) y **no proyecta** en el paso 1. Respuesta `{received, unchanged, changed, duplicated, applied, ambiguous, rejected}`; `applied` y `ambiguous` quedan en 0 hasta el paso 3.
 - Idempotente: si el hash no cambió, no escribe ni mueve `received_at`. Nunca borra.

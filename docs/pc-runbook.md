@@ -7,8 +7,8 @@
 ## Antes de tocar la PC
 
 1. **Ok escrito del veterinario** (Ley 25.326). Sin eso no se manda una fila.
-2. Token generado. **No se carga en el Worker hasta tener el ok**: el endpoint
-   falla cerrado con 401 si el secret no está.
+2. Dispositivo creado en el panel (Equipo → Dispositivos), una vez que esté el
+   ok. El panel muestra el secreto una sola vez.
 3. Cuenta de servicio decidida (ver abajo).
 
 ## Layout
@@ -17,7 +17,6 @@
 C:\ProgramData\vetter-agent\
   vetter-agent.exe
   config.json
-  token.txt
   snapshot.db
   copy\
   logs\
@@ -38,7 +37,8 @@ carpeta del usuario.
 }
 ```
 
-El token va en `token.txt`, no en el JSON.
+El secreto no va en el JSON: se guarda con `vetter-agent pair` en el almacén de
+credenciales de la cuenta de la tarea.
 
 ## Cuenta y permisos
 
@@ -50,11 +50,13 @@ El token va en `token.txt`, no en el JSON.
 
 ```powershell
 icacls "C:\ProgramData\vetter-agent" /grant:r "VETE-PC\vetter-agent:(OI)(CI)M"
-icacls "C:\ProgramData\vetter-agent\token.txt" /inheritance:r /grant:r "VETE-PC\vetter-agent:(R)"
 ```
 
-Verificar con `icacls "C:\ProgramData\vetter-agent\token.txt"`: la cuenta de la
-tarea tiene que ser la única con acceso.
+**El almacén de credenciales es por usuario.** Si la tarea corre con "no guardar
+contraseña" (S4U) o con otra cuenta, no puede descifrar lo que guardó `pair`.
+Opción que menos falla desatendida: DPAPI con scope `LocalMachine` y el archivo
+protegido por ACL para la cuenta de la tarea. `pair` tiene que terminar con un
+`schtasks /run` de la tarea, no con un POST desde la consola interactiva.
 
 ## Tarea programada
 
@@ -75,9 +77,8 @@ schtasks /Create /TN "Vetter Sync" /SC MINUTE /MO 5 /RL LIMITED `
 
 ```powershell
 # El endpoint está vivo y habla el contrato esperado
-Invoke-RestMethod -Uri "https://veterinariagachens.nevexlabs.workers.dev/api/sync/vetter" `
-  -Headers @{ Authorization = "Bearer <token>" }
-# → @{ ok = True; contract = 1 }
+Invoke-RestMethod -Uri "https://veterinariagachens.nevexlabs.workers.dev/api/sync/vetter"
+# → @{ ok = True; contract = 2 }
 
 # Última corrida
 Get-ScheduledTaskInfo -TaskName "Vetter Sync"
@@ -90,7 +91,7 @@ Get-Content "C:\ProgramData\vetter-agent\logs\agent.log" -Tail 30
 
 | Síntoma | Causa probable | Qué hacer |
 |---|---|---|
-| 401 | Token mal, o `VETTER_SYNC_TOKEN` sin cargar en el Worker | Revisar `token.txt`; no reintentar en loop |
+| 401 | Secreto inválido o revocado | Revisar el pareo; si se revocó, crear un dispositivo nuevo |
 | 400 | Body mal armado, falta `install_id`, más de 200 filas | Es un bug del agente, no reintentar |
 | 413 | Lote de más de 1 MB | Bajar el tamaño de lote |
 | 500 | Falló D1 | Reintentar con backoff |
@@ -111,6 +112,6 @@ recibido y el agente no escribe en Vetter.
 ## Nunca
 
 - Abrir los DBF con una herramienta que escriba, ni hacer `PACK`.
-- Poner el `.exe`, el token o el `snapshot.db` en OneDrive o en el Escritorio.
+- Poner el `.exe`, el secreto o el `snapshot.db` en OneDrive o en el Escritorio.
 - Correr dos instancias a la vez sobre el mismo `snapshot.db`.
 - Leer la réplica de `OneDrive\BKP Vetter5`.

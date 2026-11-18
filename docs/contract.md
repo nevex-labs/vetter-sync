@@ -3,8 +3,8 @@
 > Generado por `veterinaria-gachen/scripts/vetter-contract.mjs`. **No editar a
 > mano**: se pisa. Regenerar en `veterinaria-gachen` con `pnpm vetter:contract`.
 >
-> Origen: `veterinaria-gachen@73645ad75acd` (2026-11-18).
-> Versión del contrato: **1**.
+> Origen: `veterinaria-gachen@b78ec5e55e9f` (2026-11-18).
+> Versión del contrato: **2**.
 
 Este documento es lo que el agente de la PC necesita. El mapeo de las filas
 (`tutors`, `pets`, `visits`, `preventives`) vive en el Worker, no acá: el
@@ -17,18 +17,18 @@ POST /api/sync/vetter
 GET  /api/sync/vetter
 ```
 
-- **Auth**: `Authorization: Bearer <token>`. El token es el secret
-  `VETTER_SYNC_TOKEN` del Worker, uno por instalación. Sin el header, o con el
-  token equivocado, responde `401` sin cuerpo útil.
-- **GET** devuelve `{ "ok": true, "contract": 1 }`. Sirve para
-  verificar desde la PC que el endpoint está vivo y habla esta versión.
+- **Auth**: `Authorization: Bearer <secreto de instalación>`. El secreto lo
+  crea un superadmin en el panel (Equipo → Dispositivos) y se muestra una sola
+  vez. Empieza con `vgs_`, es revocable y no sirve para el panel.
+  Sin el header, o con uno inválido o revocado, responde `401`.
+- **GET** es público y devuelve `{ "ok": true, "contract": 2 }`.
+  Sirve para verificar desde la PC que el endpoint está vivo, sin credencial.
 - **Content-Type**: `application/json`.
 
 ## Lote
 
 ```json
 {
-  "install_id": "pc-vete",
   "rows": [
     {
       "tabla": "PACIENTES",
@@ -46,8 +46,8 @@ GET  /api/sync/vetter
   decodificadas a UTF-8. No se manda el nombre de la tabla adentro de `data`.
 - `deleted`: `true` si el registro está marcado como borrado en el DBF.
 - `hash`: ver [Hash](#hash). Entre 1 y 128 caracteres.
-- `install_id`: etiqueta de la instalación. Hoy hay una sola clínica, así que
-  identifica, no autoriza.
+- `agent_error` (opcional): lo que falló en la PC antes de armar el lote
+  (DBF bloqueado, sin red). Se guarda truncado y se ve en el panel.
 
 ### Lista blanca
 
@@ -91,13 +91,19 @@ Si el mismo lote se manda dos veces, la segunda devuelve todo en `unchanged` y
 no escribe nada. **No se puede usar `applied` para saber si el lote llegó**:
 para eso está `received`.
 
+## Heartbeat
+
+Toda request autenticada actualiza la instalación: último contacto, últimos
+conteos y último error. Un lote vacío también cuenta: es cómo la PC dice
+"estoy vivo" cuando no hay cambios. Un 401 no escribe nada.
+
 ## Códigos
 
 | Código | Cuándo | Qué hace el agente |
 |---|---|---|
 | `200` | Lote procesado, con o sin rechazos | Leer los conteos; si hay `rejected`, revisar el log del Worker |
-| `400` | Body no es JSON, falta `install_id`, o más de 200 filas | No reintentar: el lote está mal armado |
-| `401` | Falta el token o no coincide | No reintentar: revisar el archivo del token |
+| `400` | Body que no es JSON, o más de 200 filas | No reintentar: el lote está mal armado |
+| `401` | Falta el secreto, no existe o está revocado | No reintentar: revisar el pareo o pedir un dispositivo nuevo |
 | `413` | Body de más de 1.000.000 bytes | Partir el lote y reintentar |
 | `500` | Falló D1 | Reintentar con backoff |
 
