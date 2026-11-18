@@ -4,7 +4,7 @@ Agente read-only Vetter 5 → Cloudflare Worker + D1/R2.
 
 - Vetter sigue siendo el sistema de carga. Esto solo lee una copia.
 - `SPEC.md` es el spec completo y sus fases.
-- `agent/` será el binario Go (tarea programada de Windows).
+- `agent/` es el binario Go. Hoy `inspect` lee la estructura de los DBF sin escribir; `sync` y `pair` vienen después.
 - El receptor (`POST /api/sync/vetter`, tabla `vetter_rows`) ya existe en
   `veterinaria-gachen` (ADR-0016, paso 1).
 

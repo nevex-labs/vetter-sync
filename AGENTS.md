@@ -68,10 +68,21 @@ que escribir filas en un contrato que no se entiende.
 ## Build
 
 ```
-GOOS=windows GOARCH=amd64 go build -o vetter-agent.exe ./agent
+cd agent
+GOOS=windows GOARCH=amd64 go build -o ../vetter-agent.exe .
 ```
 
-Un solo `.exe`, sin runtime.
+Un solo `.exe`, sin runtime ni dependencias.
+
+El inspector de la primera visita:
+
+```
+vetter-agent.exe inspect --dir "\\Srvarchvete01\c\vetter5\Datos" --out inspector.json \
+  --stat CLIENTES.TELEFONO --stat PACIENTES.CODIGOPACI
+```
+
+Lee la estructura y cuenta sin escribir y sin sacar valores: nombres de campo,
+tipos, codepage, conteos, borrados y agregados de largos/separadores.
 
 ## Evidencia
 

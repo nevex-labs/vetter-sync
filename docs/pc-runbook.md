@@ -87,6 +87,30 @@ Get-ScheduledTaskInfo -TaskName "Vetter Sync"
 Get-Content "C:\ProgramData\vetter-agent\logs\agent.log" -Tail 30
 ```
 
+## Inspector (primera visita)
+
+Antes de instalar nada, el inspector responde el schema real sin escribir una
+fila ni sacar PII:
+
+```powershell
+.\vetter-agent.exe inspect `
+  --dir "\\Srvarchvete01\c\vetter5\Datos" `
+  --out "C:\ProgramData\vetter-inspector.json" `
+  --stat CLIENTES.TELEFONO `
+  --stat PACIENTES.CODIGOPACI
+```
+
+Devuelve, por cada DBF: versión, codepage (byte del header), cantidad de
+registros, cuántos están borrados, tamaño de registro, campos y presencia del
+`.FPT`. Con `--stat` agrega largos y separadores de un campo, nunca valores.
+
+Qué contesta: encoding, borrados lógicos, volumen real, formato de teléfonos y
+si `CODIGOPACI` es `cliente/paciente`. El JSON se lleva y se commitea como
+evidencia en `docs/vetter-schema.md`.
+
+No copia los DBF: lee el original en modo compartido. Si un archivo está
+bloqueado lo informa y sigue con el resto.
+
 ## Diagnóstico
 
 | Síntoma | Causa probable | Qué hacer |
