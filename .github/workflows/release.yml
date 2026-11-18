@@ -45,7 +45,7 @@ jobs:
           VERSION="${GITHUB_REF_NAME#v}"
           URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}/vetter-agent.exe"
           jq -n --arg v "$VERSION" --arg u "$URL" --arg s "$SHA" --arg d "$(date -u +%FT%TZ)" \
-            '{version:$v,url:$u,sha256:$s,published_at:$d,min_contract:2}' > ../manifest.json
+            '{version:$v,url:$u,sha256:$s,published_at:$d,min_contract:3}' > ../manifest.json
           cat ../manifest.json
 
       - name: Firmar manifiesto

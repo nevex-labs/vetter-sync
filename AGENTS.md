@@ -59,7 +59,7 @@ acá. La cabecera trae el commit de origen.
 Antes de mandar, el agente puede verificar contra qué habla:
 
 ```
-GET /api/sync/vetter  →  { "ok": true, "contract": 2 }
+GET /api/sync/vetter  →  { "ok": true, "contract": 3 }
 ```
 
 El GET es público: sirve para probar conectividad desde la PC sin credencial.

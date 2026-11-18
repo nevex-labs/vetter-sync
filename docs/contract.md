@@ -3,8 +3,8 @@
 > Generado por `veterinaria-gachen/scripts/vetter-contract.mjs`. **No editar a
 > mano**: se pisa. Regenerar en `veterinaria-gachen` con `pnpm vetter:contract`.
 >
-> Origen: `veterinaria-gachen@b78ec5e55e9f` (2026-11-18).
-> Versión del contrato: **2**.
+> Origen: `veterinaria-gachen@3213f53729df` (2026-11-18).
+> Versión del contrato: **3**.
 
 Este documento es lo que el agente de la PC necesita. El mapeo de las filas
 (`tutors`, `pets`, `visits`, `preventives`) vive en el Worker, no acá: el
@@ -21,7 +21,7 @@ GET  /api/sync/vetter
   crea un superadmin en el panel (Equipo → Dispositivos) y se muestra una sola
   vez. Empieza con `vgs_`, es revocable y no sirve para el panel.
   Sin el header, o con uno inválido o revocado, responde `401`.
-- **GET** es público y devuelve `{ "ok": true, "contract": 2 }`.
+- **GET** es público y devuelve `{ "ok": true, "contract": 3 }`.
   Sirve para verificar desde la PC que el endpoint está vivo, sin credencial.
 - **Content-Type**: `application/json`.
 
