@@ -114,6 +114,27 @@ también `(size, mtime)` por archivo para saltear tablas sin cambios.
 - Si falla antes de armar el lote (DBF bloqueado, share caído), mandar
   `{"rows":[],"agent_error":"..."}` con un texto corto y sin PII.
 
+## Operación desatendida
+
+Requisito: **anda solo, siempre, y cuando falla se ve.**
+
+- Tarea programada cada 5 minutos, con trigger de inicio, `MultipleInstances
+  IgnoreNew`, `StartWhenAvailable` y reinicio a los 1/2/5 minutos si falla.
+  Corre con la cuenta de servicio, sin ventana.
+- Códigos de salida: `0` ok, `1` error de configuración/share/secreto, `2` uso
+  incorrecto. Task Scheduler guarda el último código.
+- `vetter-agent status --config ...` imprime, sin red: si el secreto se puede
+  leer, último run, tablas pendientes, tamaño del outbox y último error local.
+  Es lo primero que mira Claude Code cuando algo no anda.
+- Logs en `C:\ProgramData\vetter-agent\logs\agent-AAAA-MM-DD.log`, una línea
+  JSON por evento (`ts`, `level`, `msg`, `tabla`, `filas`, `vetter_id`).
+  Rotación diaria y borrado a los 7 días. Nunca PII.
+- Cada corrida hace un chequeo previo: secreto legible, UNC alcanzable,
+  `GET` del endpoint. Si falla, loguea, intenta mandar `agent_error` y sale
+  con código 1. No se queda reintentando en silencio.
+- Un error del servidor (400, 413, 500) se loguea con el código; el panel
+  además lo ve por el heartbeat. El 401 corta la corrida.
+
 ## Tests
 
 - DBF sintéticos (no de la clínica): header, codepage, borrados, fechas.

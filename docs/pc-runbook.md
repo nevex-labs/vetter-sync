@@ -61,17 +61,36 @@ protegido por ACL para la cuenta de la tarea. `pair` tiene que terminar con un
 ## Tarea programada
 
 ```powershell
-schtasks /Create /TN "Vetter Sync" /SC MINUTE /MO 5 /RL LIMITED `
-  /RU "VETE-PC\vetter-agent" /RP * `
-  /TR "\"C:\ProgramData\vetter-agent\vetter-agent.exe\" --config \"C:\ProgramData\vetter-agent\config.json\""
+$action = New-ScheduledTaskAction `
+  -Execute "C:\ProgramData\vetter-agent\vetter-agent.exe" `
+  -Argument 'sync --config "C:\ProgramData\vetter-agent\config.json"'
+
+$trigger = New-ScheduledTaskTrigger -AtStartup
+$trigger.Repetition = (New-ScheduledTaskTrigger -Once -At (Get-Date) `
+  -RepetitionInterval (New-TimeSpan -Minutes 5) `
+  -RepetitionDuration (New-TimeSpan -Days 3650)).Repetition
+
+$settings = New-ScheduledTaskSettingsSet `
+  -MultipleInstances IgnoreNew `
+  -StartWhenAvailable `
+  -RestartCount 3 `
+  -RestartInterval (New-TimeSpan -Minutes 1) `
+  -ExecutionTimeLimit (New-TimeSpan -Minutes 10)
+
+Register-ScheduledTask -TaskName "Vetter Sync" `
+  -Action $action -Trigger $trigger -Settings $settings `
+  -User "VETE-PC\vetter-agent" -Password (Read-Host -AsSecureString "Password")
 ```
 
-- `/RP *` pide la contraseña de la cuenta.
-- `/RL LIMITED`: no hace falta administrador.
+- Corre al iniciar y cada 5 minutos, aunque el usuario no tenga sesión.
+- Si falla, Task Scheduler reintenta 3 veces (1, 2 y 5 minutos).
+- `StartWhenAvailable`: si la PC estaba apagada, corre al volver.
 - **Unidades mapeadas**: `Z:` es por sesión y una tarea desatendida no la ve.
   Por eso `z_path` va por UNC.
-- Una corrida perdida (PC apagada) no necesita recuperación: la siguiente
-  compara contra `snapshot.db` y manda todo lo que cambió.
+- Una corrida perdida no necesita recuperación: la siguiente compara contra el
+  snapshot y manda lo que cambió.
+- `Get-ScheduledTaskInfo -TaskName "Vetter Sync"` muestra el último código de
+  salida. `vetter-agent status --config ...` muestra el estado local.
 
 ## Verificar
 
