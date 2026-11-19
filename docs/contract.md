@@ -3,7 +3,7 @@
 > Generado por `veterinaria-gachen/scripts/vetter-contract.mjs`. **No editar a
 > mano**: se pisa. Regenerar en `veterinaria-gachen` con `pnpm vetter:contract`.
 >
-> Origen: `veterinaria-gachen@bdb455d863ca` (2026-11-18).
+> Origen: `veterinaria-gachen@567082bac263` (2026-11-19).
 > Versión del contrato: **3**.
 
 Este documento es lo que el agente de la PC necesita. El mapeo de las filas
@@ -139,8 +139,9 @@ Regla v1:
 1. Una fila del DBF se convierte en un objeto con los nombres de campo del DBF,
    recortando los espacios de relleno de los campos carácter.
 2. Los valores van tipados: texto como string, números como number, fechas como
-   `"AAAA-MM-DD"`, lógicos como `0`/`1`. Un campo vacío es `null`, nunca
-   `""`.
+   `"AAAA-MM-DD"`, fecha y hora (`T`, como la de `visitas.FECHA`) como
+   `"AAAA-MM-DDTHH:MM:SS"` en hora local de la clínica y sin zona, lógicos como
+   `0`/`1`. Un campo vacío es `null`, nunca `""`.
 3. Se agrega `{"deleted": 0|1}` al objeto antes de hashear.
 4. Se serializa con las claves **ordenadas alfabéticamente**, sin espacios.
 5. `sha256` de ese UTF-8, en hexadecimal minúscula.
