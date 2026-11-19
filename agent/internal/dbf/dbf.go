@@ -88,6 +88,29 @@ func Encoding(driver byte) string {
 	return "desconocido"
 }
 
+// Records devuelve cuántos registros tiene la tabla sin leer las filas: solo el
+// header y el tamaño. `Open` sí recorre todo para contar los borrados, y para
+// comparar dos copias alcanza con esto.
+func Records(path string) (int, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return 0, fmt.Errorf("abrir %s: %w", path, err)
+	}
+	defer func() { _ = file.Close() }()
+
+	info, err := file.Stat()
+	if err != nil {
+		return 0, fmt.Errorf("stat %s: %w", path, err)
+	}
+
+	head, err := readHeader(file)
+	if err != nil {
+		return 0, err
+	}
+
+	return computedRecords(info.Size(), head), nil
+}
+
 // Open lee el header, los campos y cuenta los registros borrados.
 func Open(path string) (*Table, error) {
 	file, err := os.Open(path)

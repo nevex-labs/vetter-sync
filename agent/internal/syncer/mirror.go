@@ -2,8 +2,6 @@ package syncer
 
 import (
 	"fmt"
-	"path/filepath"
-	"strings"
 
 	"vetter-sync/agent/internal/dbf"
 )
@@ -17,39 +15,43 @@ import (
 // cantidad de registros de cada tabla entre las dos rutas y lo manda en
 // `agent_error`. Abre solo el header; nunca lee filas de la réplica, así que no
 // hay riesgo de importar datos viejos.
+//
+// Cantidades iguales no significan copias iguales: `VACUNAS` tiene los mismos
+// registros en las dos y aun así el UNC tiene escrituras más nuevas. El silencio
+// de este aviso no es un "está sincronizado".
 func mirrorDifferences(source, mirror string) []string {
 	var out []string
 
 	for _, table := range Tables() {
-		name := strings.ToUpper(table) + ".dbf"
-
-		from, err := recordsOf(filepath.Join(source, name))
+		// `findTable` compara sin distinguir mayúsculas: en la clínica conviven
+		// CLIENTES.DBF y visitas.dbf.
+		fromPath, err := findTable(source, table)
 		if err != nil {
-			out = append(out, fmt.Sprintf("%s: no se pudo leer el UNC (%v)", table, err))
-			continue
+			return []string{"mirror: no se pudo leer el UNC"}
 		}
 
-		to, err := recordsOf(filepath.Join(mirror, name))
+		toPath, err := findTable(mirror, table)
 		if err != nil {
-			// La réplica puede no existir o estar tomada por OneDrive: se avisa
-			// una vez y se sigue; no es motivo para cortar el sync.
-			out = append(out, fmt.Sprintf("%s: no se pudo leer OneDrive (%v)", table, err))
-			continue
+			// Si no se puede leer la réplica, una línea y se corta: repetirla
+			// cinco veces con rutas y errores del sistema pasa el tope de
+			// `agent_error` y tapa otras fallas.
+			return []string{"mirror: no se pudo leer OneDrive"}
+		}
+
+		from, err := dbf.Records(fromPath)
+		if err != nil {
+			return []string{"mirror: no se pudo leer el UNC"}
+		}
+
+		to, err := dbf.Records(toPath)
+		if err != nil {
+			return []string{"mirror: no se pudo leer OneDrive"}
 		}
 
 		if from != to {
-			out = append(out, fmt.Sprintf("%s: UNC %d, OneDrive %d", table, from, to))
+			out = append(out, fmt.Sprintf("mirror: %s UNC %d, OneDrive %d", table, from, to))
 		}
 	}
 
 	return out
-}
-
-func recordsOf(path string) (int, error) {
-	table, err := dbf.Open(path)
-	if err != nil {
-		return 0, fmt.Errorf("abrir %s: %w", path, err)
-	}
-
-	return table.Computed, nil
 }

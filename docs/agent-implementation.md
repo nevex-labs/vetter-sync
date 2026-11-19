@@ -29,7 +29,9 @@ tarea programada: copia, parsea, hashea y empuja. No mapea a `tutors`, `pets`,
   "install_id": "pc-vete",
   // Opcional: carpeta donde escribe el Vetter de esta PC. Si está, cada corrida
   // compara la cantidad de registros de cada tabla contra el UNC y avisa por
-  // agent_error si divergen. Solo abre headers: no importa datos de la réplica.
+  // agent_error si divergen. Abre solo headers: no importa datos de la réplica.
+  // Cantidades iguales no significan copias iguales (VACUNAS ya divergía con
+  // el mismo número); el silencio no es un "está sincronizado".
   "mirror_path": "C:\\Users\\usuario\\OneDrive\\BKP Vetter5\\Datos",
   "max_rows_per_run": 5000,
   "keys": {

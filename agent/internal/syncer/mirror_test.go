@@ -1,6 +1,7 @@
 package syncer
 
 import (
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -20,7 +21,13 @@ func TestMirrorDifferences(t *testing.T) {
 	counts := map[string]int{"CLIENTES": 2, "PACIENTES": 3, "VACUNAS": 1, "VISITAS": 4, "ADJUNTOS": 2}
 
 	for table, n := range counts {
+		// En la clínica `visitas.dbf` está en minúscula.
 		name := strings.ToUpper(table) + ".dbf"
+
+		if table == "VISITAS" {
+			name = "visitas.dbf"
+		}
+
 		records := make([]dbftest.Record, n)
 
 		for i := range records {
@@ -54,12 +61,40 @@ func TestMirrorDifferences(t *testing.T) {
 		t.Fatalf("diferencias = %v, quería 2", got)
 	}
 
-	if !strings.Contains(got[0], "PACIENTES: UNC 3, OneDrive 4") {
+	if !strings.Contains(got[0], "mirror: PACIENTES UNC 3, OneDrive 4") {
 		t.Errorf("primera diferencia = %q", got[0])
 	}
 
-	if !strings.Contains(got[1], "VISITAS: UNC 4, OneDrive 3") {
+	if !strings.Contains(got[1], "mirror: VISITAS UNC 4, OneDrive 3") {
 		t.Errorf("segunda diferencia = %q", got[1])
+	}
+}
+
+// Si la réplica no existe, es un aviso corto: el panel no puede llenarse de
+// rutas ni pasar el tope de `agent_error`.
+func TestMirrorDifferencesSinReplica(t *testing.T) {
+	t.Parallel()
+
+	source := t.TempDir()
+	fields := []dbftest.Field{{Name: "CODIGO", Type: 'N', Length: 6}}
+	records := []dbftest.Record{{Values: []string{"1"}}}
+
+	for _, table := range Tables() {
+		dbftest.Write(t, source, strings.ToUpper(table)+".dbf", 0x03, fields, records)
+	}
+
+	got := mirrorDifferences(source, filepath.Join(t.TempDir(), "no-existe"))
+
+	if len(got) != 1 {
+		t.Fatalf("diferencias = %v, quería una", got)
+	}
+
+	if got[0] != "mirror: no se pudo leer OneDrive" {
+		t.Errorf("mensaje = %q", got[0])
+	}
+
+	if len(got[0]) > maxAgentError {
+		t.Errorf("mensaje de %d bytes, tope %d", len(got[0]), maxAgentError)
 	}
 }
 
