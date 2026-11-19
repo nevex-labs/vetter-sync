@@ -239,6 +239,12 @@ func dryRunCommand(ctx context.Context, cfg syncer.Config, logger *slog.Logger) 
 // realSync hace el chequeo previo (secreto, UNC, contrato) y la corrida. Si
 // algo falla, lo loguea, intenta mandar agent_error y sale con 1.
 func realSync(ctx context.Context, cfg syncer.Config, logger *slog.Logger) int {
+	dir := filepath.Dir(cfg.Snapshot)
+
+	// Cada corrida cuenta para el rollback; se borra cuando termina bien.
+	countAttempt(dir)
+	selfUpdate(ctx, dir, logger)
+
 	token, path, err := secret.Load(secret.Candidates())
 	if err != nil {
 		logger.Error("secreto ilegible", "err", err)
@@ -282,6 +288,12 @@ func realSync(ctx context.Context, cfg syncer.Config, logger *slog.Logger) int {
 		logger.Info("resumen", "tabla", table.Table, "filas", table.Rows, "pendientes", table.Pending,
 			"confirmadas", table.Confirmed, "sin_cambios", table.Unchanged, "error", table.Error)
 	}
+
+	// Llegar acá con la corrida hecha confirma que la versión instalada corre.
+	writeCounter(filepath.Join(dir, "update.attempts"), 0)
+
+	// Llegar acá con la corrida hecha confirma que la versión instalada corre.
+	writeCounter(filepath.Join(dir, "update.attempts"), 0)
 
 	if len(summary.Errors) > 0 {
 		return exitError

@@ -165,19 +165,27 @@ nadie la toque ni abra Claude Code.
 - Firma: ed25519 sobre los bytes exactos del manifiesto, en `manifest.sig`. La
   clave pública se compila con `-X main.updatePublicKey=...`; si está vacía,
   auto-update deshabilitado (falla cerrado).
-- Chequeo: una vez cada 24 h, antes del sync. No cada 5 minutos.
-- Descarga a `updates/vetter-agent-<version>.exe` y verifica **sha256 y firma**
-  antes de tocar nada.
-- Swap al inicio de la corrida siguiente: renombrar el actual a `.old` y mover
-  el staged al nombre real. Nunca sobrescribir el binario en ejecución.
-- Rollback: si la versión nueva no marca un run OK en 3 corridas, restaurar
-  `.old` y loguear. El `.old` se conserva hasta el primer run OK.
-- Contrato: si `min_contract` es mayor que el `contract` del `GET`, no manda y
-  reporta `agent_error`; el update se puede hacer igual.
-- Logs: `update.check`, `update.available`, `update.downloaded`,
-  `update.verified`, `update.staged`, `update.swapped`, `update.rollback`, con
-  las dos versiones.
-- `status` muestra versión actual, staged, último chequeo y fallas.
+- Chequeo: una vez cada 24 h, al principio del sync. La marca vive en
+  `update.checked`, al lado del snapshot; si no se puede consultar (sin red, sin
+  release) se sigue sincronizando.
+- Descarga a `<exe>.new`, al lado del binario, y verifica **firma y sha256**
+  antes de tocar nada: el `.new` se borra si el hash no coincide.
+- Swap en la misma corrida del chequeo: se renombra el ejecutable en curso a
+  `.old` y el `.new` ocupa su nombre. Windows permite renombrar un `.exe` en
+  ejecución; el proceso actual termina con el código que ya tiene cargado y la
+  corrida siguiente arranca con la versión nueva.
+- Rollback: cada corrida suma uno en `update.attempts`; una corrida que termina
+  bien lo pone en cero. Con 3 y un `.old` presente, se restaura el anterior y se
+  loguea. Cubre el caso de una versión que arranca pero no sincroniza; no cubre
+  un binario que no llega a ejecutarse, que la verificación de sha256 hace
+  improbable.
+- Contrato: si `min_contract` del release es mayor que el del agente, no se
+  instala y se loguea; el release se puede publicar igual.
+- Logs (en español, como el resto del agente): `update: no se pudo consultar el
+  release`, `update: manifiesto rechazado`, `update: no se pudo bajar la
+  versión`, `update: instalada, la próxima corrida la usa`, `update: la versión
+  nueva falló tres veces, restaurada la anterior`.
+- `status` (versión actual, último chequeo y fallas) sigue pendiente.
 - El heartbeat manda `agent_version`; el panel muestra qué versión corre cada
   PC. Ese campo va en el contrato (paso siguiente en gachen).
 
