@@ -4,10 +4,13 @@
 //
 //	vetter-agent inspect --dir \\Srvarchvete01\c\vetter5\Datos --out inspector.json
 //	vetter-agent inspect --dir ... --stat CLIENTES.TELEFONO --stat PACIENTES.CODIGOPACI
+//	vetter-agent pair [--config C:\ProgramData\vetter-agent\config.json]
+//	vetter-agent sync --config C:\ProgramData\vetter-agent\config.json [--dry-run]
 //	vetter-agent version
 //
 // `inspect` es la fase 3 del SPEC: estructura, conteos y agregados sin PII.
-// `pair` y `sync` van después; todavía no están implementados.
+// `pair` guarda el secreto de instalación; `sync` es la corrida de la tarea
+// programada (docs/agent-implementation.md).
 package main
 
 import (
@@ -21,15 +24,22 @@ import (
 )
 
 // Se pisan en el release con -ldflags.
-var version = "0.1.1"
+var version = "0.2.0-dev"
 
 //nolint:unused // la pisa el release con -ldflags
 var updatePublicKey = ""
 
+// Códigos de salida que guarda Task Scheduler.
+const (
+	exitOK    = 0
+	exitError = 1
+	exitUsage = 2
+)
+
 func main() {
 	if len(os.Args) < 2 {
 		usage()
-		os.Exit(2)
+		os.Exit(exitUsage)
 	}
 
 	switch os.Args[1] {
@@ -37,12 +47,13 @@ func main() {
 		inspect(os.Args[2:])
 	case "version":
 		fmt.Printf("vetter-agent %s\n", version)
-	case "pair", "sync":
-		fmt.Println("Todavía no implementado. Ver docs/contract.md y docs/pc-runbook.md.")
-		os.Exit(1)
+	case "pair":
+		os.Exit(pair(os.Args[2:]))
+	case "sync":
+		os.Exit(syncCommand(os.Args[2:]))
 	default:
 		usage()
-		os.Exit(2)
+		os.Exit(exitUsage)
 	}
 }
 
@@ -50,6 +61,8 @@ func usage() {
 	fmt.Fprintln(os.Stderr, `vetter-agent — lee la copia de Vetter, nunca la escribe
 
   inspect --dir <ruta> [--out inspector.json] [--stat TABLA.CAMPO ...]
+  pair    [--config <config.json>] [--gui | --clipboard]
+  sync    --config <config.json> [--dry-run]
   version`)
 }
 

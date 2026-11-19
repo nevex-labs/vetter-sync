@@ -31,15 +31,25 @@ tarea programada: copia, parsea, hashea y empuja. No mapea a `tutors`, `pets`,
   "keys": {
     "CLIENTES": "CODIGO",
     "PACIENTES": "CODIGOPACI",
-    "VACUNAS": "",
-    "VISITAS": "",
-    "ADJUNTOS": ""
+    "VACUNAS": "ID_VACUNA",
+    "VISITAS": "CODIGO+FECHA",
+    "ADJUNTOS": "ID_ADJ"
   }
 }
 ```
 
-Las tres claves vacías se completan con lo que muestre el inspector. Si falta
-una, `sync` no adivina: la saltea y reporta `agent_error`.
+Keys confirmadas en la visita del 2026-11-18 (`docs/informe-visita.md`). Si
+falta una, `sync` no adivina: la saltea y reporta `agent_error`.
+
+- Una key compuesta (`"A+B"`) une los valores con `|`:
+  `"1524|2026-10-14T09:00:00"`. Si falta alguna parte, la fila no tiene id y se
+  cuenta como `sin_id`. `VISITAS` la necesita: no tiene id propio y su
+  `CODIGO` es el del cliente.
+- Si un `vetter_id` se repite en la tabla gana la última, salvo que la última
+  esté borrada y la anterior viva: un borrado viejo no anula una fila viva.
+- `log_dir` es opcional; por defecto `logs\` al lado del snapshot.
+- El `install_id` viaja en el `User-Agent` (`vetter-agent/<versión> (pc-vete)`):
+  el contrato 3 no tiene un campo para eso en el body.
 
 ## Secreto
 
@@ -67,6 +77,10 @@ secreto inválido o revocado.
 - Campos `C`: recortar espacios y `\x00` a la derecha; vacío → `null`.
 - `N`/`F`: entero si no tiene decimales, `float64` si tiene.
 - `D`: `"AAAA-MM-DD"` o `null`.
+- `T` (DateTime de Visual FoxPro, `visitas.FECHA`): `"AAAA-MM-DDTHH:MM:SS"`,
+  hora local de la clínica sin zona, redondeado al segundo; vacío → `null`.
+- `I`, `B`, `Y`: entero, `float64` y moneda (`float64`). La columna de sistema
+  `_NullFlags` (`0`) no se manda.
 - `L`: `0`/`1`.
 - `M`: si el inspector muestra que la nota vive en memo, leer el `.FPT`
   (bloque de 64 bytes, tamaño en el header). Si no, dejarlo como número de
@@ -169,6 +183,16 @@ nadie la toque ni abra Claude Code.
 - `deleted` viaja como `true` y el `vetter_id` sale de `keys`.
 - `413` parte el lote; `401` corta.
 - `go test ./...` y `go vet ./...`.
+
+## Estado (2026-11-18)
+
+Implementado: `pair` (consola con `*`, `--clipboard` y `--gui`), `sync` y
+`sync --dry-run`, con copia, parser, hash, snapshot, lotes, 413/401/400/500,
+outbox, heartbeat, `agent_error` y logs diarios. En la PC: pareado, volcado
+inicial completo y tarea `Vetter Sync` cada 15 minutos (ver
+`informe-visita.md`). Pendiente: `status`, auto-update y que el release
+publique también el build sin consola (`-ldflags -H=windowsgui`) que usa la
+tarea.
 
 ## Terminado cuando
 
