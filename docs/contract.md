@@ -3,7 +3,7 @@
 > Generado por `veterinaria-gachen/scripts/vetter-contract.mjs`. **No editar a
 > mano**: se pisa. Regenerar en `veterinaria-gachen` con `pnpm vetter:contract`.
 >
-> Origen: `veterinaria-gachen@28c8d9467776` (2026-11-18).
+> Origen: `veterinaria-gachen@bdb455d863ca` (2026-11-18).
 > Versión del contrato: **3**.
 
 Este documento es lo que el agente de la PC necesita. El mapeo de las filas

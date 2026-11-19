@@ -40,9 +40,9 @@ Fuente: diagnóstico remoto del 15/10 (hipótesis a confirmar con la copia). Des
 |---|---|---|
 | `CLIENTES.CODIGO, NOMBRE, TELEFONO(40c texto libre)` | `tutors` + `tutor_phones` | Un tutor por cliente y un teléfono por cada número válido. No toca `conversations` ni `contact_name` (ADR-0013). |
 | `PACIENTES.CODIGOPACI texto tipo 1524/2` | `pets.vetter_id UNIQUE` | Llave estable. Hipótesis a confirmar: el prefijo es el código de cliente. |
-| `PACIENTES nombre, especie, raza, sexo` | `pets.nombre, nombre_norm, especie, raza` | `nombre_norm = lower(trim)`. Sin UNIQUE por homónimos. Sexo y nacimiento esperan el schema confirmado. |
-| `VACUNAS.FECHA_REVA` próxima dosis | `preventives.proxima_dosis` | `AVISADO` no se usa. Importar no avisa: el recordatorio del ADR-0015 no está implementado. |
-| `VISITAS` bitácora con fecha/hora | `visits` + `visit_notes` | Única tabla con timestamp por evento. Las notas son append-only; la deduplicación va en el paso 4. |
+| `PACIENTES nombre, especie, raza, sexo` | `pets.name, name_norm, species, breed, sex, birth_date` | `name_norm = lower(trim)`. Sin UNIQUE por homónimos. El sexo trae la castración y se separa en `sex`/`neutered`. |
+| `VACUNAS.FECHA_REVA` próxima dosis | `preventives.next_dose` | `AVISADO` no se usa. Importar no avisa: el recordatorio del ADR-0015 no está implementado. |
+| `VISITAS` bitácora con fecha/hora | — | Es el registro de eventos de Vetter, no una atención: no se proyecta (ADR 0020). La historia real está en `CLINICA`, fuera de la lista blanca. |
 | `ADJUNTOS` + PDFs/JPGs | `attachments.r2_key` + R2 `veterinaria-gachen-files` | Layout `vetter/<tabla>/<vetter_id>/<nombre>`. Reimportar no duplica (`r2_key` UNIQUE). |
 | Turnos Vetter | nada (0 registros según reporte) | Nuestro bot es el sistema de turnos, sin conflicto. |
 
@@ -54,7 +54,7 @@ Tablas clínicas nuevas (`preventives`, `attachments`) referencian `pets.id`, nu
 
 Reporte dice: ningún campo guarda fecha de modificación. Estrategia combinada:
 
-1. `VISITAS` como bitácora (qué paciente se tocó, cuándo).
+1. `VISITAS` como bitácora (qué paciente se tocó, cuándo). No se importa; la detección usa `mtime` y hash.
 2. IDs autoincrementales (lo nuevo).
 3. `mtime` de DBF/FPT para decidir si vale copiar.
 4. Hash por fila vs `snapshot.db` local (SQLite del agente) para ediciones sin fecha.
@@ -77,7 +77,7 @@ Limitación: ediciones sin cambio de fecha solo se ven por hash. Borrados lógic
 - Cuerpo: `{ install_id, rows: [{ tabla, vetter_id, hash, deleted, data }] }`, hasta 200 filas y 1 MB.
 - Guarda en `vetter_rows` (zona de llegada) y **no proyecta** en el paso 1. Respuesta `{received, unchanged, changed, duplicated, applied, ambiguous, rejected}`; `applied` y `ambiguous` quedan en 0 hasta el paso 3.
 - Idempotente: si el hash no cambió, no escribe ni mueve `received_at`. Nunca borra.
-- Lista blanca: `CLIENTES`, `PACIENTES`, `VACUNAS`, `VISITAS`, `ADJUNTOS`. El resto se rechaza y se cuenta.
+- Lista blanca: `CLIENTES`, `PACIENTES`, `VACUNAS`, `ADJUNTOS`. `VISITAS` sale en la próxima versión del agente (ADR 0020); el resto se rechaza y se cuenta.
 - PDFs: el agente sube directo a R2 con URL firmada o manda bytes en lote chico. Layout: `vetter/<tabla>/<vetter_id>/<nombre>`.
 - Volcado inicial 60k registros: repartir en días, lotes chicos. Free tiene 50 subrequests/invocación. Si se pasa, subir a pago o bajar `FILES_PER_RUN`.
 

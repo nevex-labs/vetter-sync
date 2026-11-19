@@ -37,9 +37,9 @@ Los inválidos se cuentan y se descartan.
 | Campo (hipótesis) | Tipo | Uso | Confirmado |
 |---|---|---|---|
 | `CODIGOPACI` | texto, ej. `1524/2` | `pets.vetter_id` | no |
-| `NOMBRE` | texto | `pets.nombre` | no |
-| `ESPECIE` | texto | `pets.especie` | no |
-| `RAZA` | texto | `pets.raza` | no |
+| `NOMBRE` | texto | `pets.name` | no |
+| `ESPECIE` | texto | `pets.species` | no |
+| `RAZA` | texto | `pets.breed` | no |
 | `SEXO` | texto | pendiente de schema | no |
 
 Hipótesis fuerte: `CODIGOPACI` es `código de cliente / número de paciente`. Si
@@ -50,11 +50,11 @@ se confirma, el tutor se puede derivar del código de paciente aunque la fila de
 
 | Campo (hipótesis) | Uso | Confirmado |
 |---|---|---|
-| `FECHA_REVA` | próxima dosis → `preventives.proxima_dosis` | no |
-| tipo / producto | `preventives.tipo` y `.producto` | no |
+| `FECHA_REVA` | próxima dosis → `preventives.next_dose` | no |
+| tipo / producto | `preventives.type` y `.product` | no |
 | `AVISADO` | no se usa | no |
 
-`preventives.tipo` solo admite `vacuna` o `antiparasitario`. Si `VACUNAS` mezcla
+`preventives.type` solo admite `vacuna` o `antiparasitario`. Si `VACUNAS` mezcla
 otras cosas, hay que decidir cómo se agrupan antes de proyectar.
 
 ### `VISITAS`
@@ -62,12 +62,10 @@ otras cosas, hay que decidir cómo se agrupan antes de proyectar.
 | Campo (hipótesis) | Uso | Confirmado |
 |---|---|---|
 | fecha / hora | `visits.fecha` y `.hora` | no |
-| texto de la atención | `visit_notes.texto` | no |
+| texto de la atención | `visit_notes.text` (no se proyecta: ADR 0020) | no |
 | profesional | `visits.doctor_id` (3 códigos) | no |
 
-Es la única tabla con timestamp por evento. `visit_notes` es append-only: una
-nota corregida entra como nota nueva. La deduplicación de reintentos va en la
-proyección (paso 4), no en el agente.
+Es la única tabla con timestamp por evento. Es una bitácora de eventos, no una lista de atenciones: no se proyecta (ADR 0020). La historia clínica real está en `CLINICA`.
 
 ### `ADJUNTOS`
 
