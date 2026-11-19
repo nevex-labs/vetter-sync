@@ -19,7 +19,11 @@ func Tables() []string {
 
 // Config es el config.json de la PC. Vive fuera del repo.
 type Config struct {
-	ZPath         string            `json:"z_path"`
+	ZPath string `json:"z_path"`
+	// MirrorPath es la carpeta donde el Vetter de esta PC escribe (OneDrive).
+	// Opcional: si está, cada corrida compara cuántos registros tiene cada tabla
+	// contra el UNC y avisa si divergen. Solo lee headers.
+	MirrorPath    string            `json:"mirror_path"`
 	CopyDir       string            `json:"copy_dir"`
 	Snapshot      string            `json:"snapshot"`
 	Endpoint      string            `json:"endpoint"`

@@ -27,6 +27,10 @@ tarea programada: copia, parsea, hashea y empuja. No mapea a `tutors`, `pets`,
   "snapshot": "C:\\ProgramData\\vetter-agent\\snapshot.json",
   "endpoint": "https://<worker>/api/sync/vetter",
   "install_id": "pc-vete",
+  // Opcional: carpeta donde escribe el Vetter de esta PC. Si está, cada corrida
+  // compara la cantidad de registros de cada tabla contra el UNC y avisa por
+  // agent_error si divergen. Solo abre headers: no importa datos de la réplica.
+  "mirror_path": "C:\\Users\\usuario\\OneDrive\\BKP Vetter5\\Datos",
   "max_rows_per_run": 5000,
   "keys": {
     "CLIENTES": "CODIGO",

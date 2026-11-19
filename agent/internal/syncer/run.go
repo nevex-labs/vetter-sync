@@ -81,6 +81,12 @@ func (r *Runner) Run(ctx context.Context) (Summary, error) {
 
 	serverDown = state.serverDown
 
+	// Divergencia entre el UNC y lo que escribe el Vetter de esta PC. No corta
+	// la corrida: viaja en agent_error para que se vea en el panel.
+	if r.Config.MirrorPath != "" {
+		summary.Errors = append(summary.Errors, mirrorDifferences(r.Config.ZPath, r.Config.MirrorPath)...)
+	}
+
 	if r.DryRun {
 		return summary, nil
 	}
