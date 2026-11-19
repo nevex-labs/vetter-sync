@@ -1,0 +1,5043 @@
+{
+  "generated_at": "2026-11-18T15:14:34-03:00",
+  "dir": "\\\\Srvarchvete01\\c\\vetter5\\Datos",
+  "files": [
+    {
+      "name": "ADJUNTOS.DBF",
+      "size": 1720481,
+      "modified": "2026-11-17T18:40:30-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1926-11-11",
+        "header_bytes": 456,
+        "record_bytes": 536,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 3209,
+        "computed_from_size": 3209,
+        "match": true,
+        "deleted": 94
+      },
+      "fields": [
+        {
+          "name": "ID_ADJ",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGOPACI",
+          "type": "C",
+          "length": 9,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "TITULO",
+          "type": "C",
+          "length": 254,
+          "decimals": 0
+        },
+        {
+          "name": "ARCHIVO",
+          "type": "C",
+          "length": 254,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "CLIENTES.DBF",
+      "size": 3334450,
+      "modified": "2026-11-18T14:23:12-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1926-11-16",
+        "header_bytes": 840,
+        "record_bytes": 933,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 3573,
+        "computed_from_size": 3573,
+        "match": true,
+        "deleted": 37
+      },
+      "fields": [
+        {
+          "name": "CODIGO",
+          "type": "N",
+          "length": 6,
+          "decimals": 0
+        },
+        {
+          "name": "NOMBRE",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "DIRECCION",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "TELEFONO",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "SMS",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "CIA_CEL",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        },
+        {
+          "name": "LOCALIDAD",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "PROVINCIA",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "CODPOSTAL",
+          "type": "C",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "FECHAALTA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "ULTIMAVEZ",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "TIPO",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "EMAIL",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "FOTO",
+          "type": "C",
+          "length": 254,
+          "decimals": 0
+        },
+        {
+          "name": "SALDO",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "DATOS_FAC",
+          "type": "C",
+          "length": 200,
+          "decimals": 0
+        },
+        {
+          "name": "ANULADO",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        }
+      ],
+      "stats": [
+        {
+          "field": "TELEFONO",
+          "scanned": 3536,
+          "non_empty": 3532,
+          "digits_only": 66,
+          "separators": {
+            "plus": 1031,
+            "slash": 71,
+            "space": 2642
+          },
+          "lengths": {
+            "10": 72,
+            "11": 2340,
+            "12": 36,
+            "13": 989,
+            "14": 12,
+            "15": 6,
+            "17": 3,
+            "19": 1,
+            "20": 1,
+            "21": 28,
+            "22": 3,
+            "23": 1,
+            "24": 1,
+            "25": 33,
+            "27": 1,
+            "28": 1,
+            "3": 1,
+            "30": 1,
+            "9": 2
+          },
+          "prefix_lengths": {
+            "11": 1,
+            "12": 63,
+            "13": 2,
+            "14": 2,
+            "15": 1,
+            "16": 1,
+            "17": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "CLINICA.DBF",
+      "size": 70445,
+      "modified": "2026-11-18T14:44:25-03:00",
+      "memo": {
+        "name": "CLINICA.FPT",
+        "size": 26189888
+      },
+      "header": {
+        "version": "0x30",
+        "updated_at": "1926-11-16",
+        "header_bytes": 360,
+        "record_bytes": 14,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 5006,
+        "computed_from_size": 5006,
+        "match": true,
+        "deleted": 36
+      },
+      "fields": [
+        {
+          "name": "CODIGOPACI",
+          "type": "C",
+          "length": 9,
+          "decimals": 0
+        },
+        {
+          "name": "DESCRIP",
+          "type": "M",
+          "length": 4,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "FOTOS.DBF",
+      "size": 59169,
+      "modified": "2025-01-13T18:47:45-03:00",
+      "memo": {
+        "name": "FOTOS.FPT",
+        "size": 1920
+      },
+      "header": {
+        "version": "0x30",
+        "updated_at": "1925-01-13",
+        "header_bytes": 456,
+        "record_bytes": 358,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 164,
+        "computed_from_size": 164,
+        "match": true,
+        "deleted": 2
+      },
+      "fields": [
+        {
+          "name": "ID_FOTO",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGOPACI",
+          "type": "C",
+          "length": 9,
+          "decimals": 0
+        },
+        {
+          "name": "ARCHIVO",
+          "type": "C",
+          "length": 254,
+          "decimals": 0
+        },
+        {
+          "name": "NOMBRE",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "ACLARACION",
+          "type": "M",
+          "length": 4,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "METODOS.DBF",
+      "size": 313945,
+      "modified": "2026-11-14T11:55:29-03:00",
+      "memo": {
+        "name": "METODOS.FPT",
+        "size": 1789952
+      },
+      "header": {
+        "version": "0x30",
+        "updated_at": "1926-11-14",
+        "header_bytes": 456,
+        "record_bytes": 72,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 4354,
+        "computed_from_size": 4354,
+        "match": true,
+        "deleted": 73
+      },
+      "fields": [
+        {
+          "name": "ID_METODO",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGO_PAC",
+          "type": "C",
+          "length": 9,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "TITULO",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "DATOS",
+          "type": "M",
+          "length": 4,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "NORMALES.DBF",
+      "size": 14527,
+      "modified": "2023-01-18T21:48:03-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1923-01-18",
+        "header_bytes": 488,
+        "record_bytes": 101,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 139,
+        "computed_from_size": 139,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ANALISIS",
+          "type": "C",
+          "length": 20,
+          "decimals": 0
+        },
+        {
+          "name": "DETALLE",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "ESPECIE",
+          "type": "C",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "MINIMO",
+          "type": "N",
+          "length": 10,
+          "decimals": 2
+        },
+        {
+          "name": "MAXIMO",
+          "type": "N",
+          "length": 10,
+          "decimals": 2
+        },
+        {
+          "name": "UNIDAD",
+          "type": "C",
+          "length": 10,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "PACIENTES.DBF",
+      "size": 2565297,
+      "modified": "2026-11-18T14:23:12-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1926-11-16",
+        "header_bytes": 776,
+        "record_bytes": 497,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 5160,
+        "computed_from_size": 5160,
+        "match": true,
+        "deleted": 46
+      },
+      "fields": [
+        {
+          "name": "CODIGO",
+          "type": "N",
+          "length": 6,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGOPACI",
+          "type": "C",
+          "length": 9,
+          "decimals": 0
+        },
+        {
+          "name": "NOMBRE",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "ESPECIE",
+          "type": "C",
+          "length": 30,
+          "decimals": 0
+        },
+        {
+          "name": "RAZA",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "SEXO",
+          "type": "C",
+          "length": 30,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA_NAC",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "ULTIMA_VES",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "MICROCHIP",
+          "type": "C",
+          "length": 30,
+          "decimals": 0
+        },
+        {
+          "name": "FOTO",
+          "type": "C",
+          "length": 254,
+          "decimals": 0
+        },
+        {
+          "name": "VIVE",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "FECHAALTA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "PELAJE",
+          "type": "C",
+          "length": 30,
+          "decimals": 0
+        },
+        {
+          "name": "ANULADO",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "EXTRAV",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        }
+      ],
+      "stats": [
+        {
+          "field": "CODIGOPACI",
+          "scanned": 5114,
+          "non_empty": 5114,
+          "digits_only": 0,
+          "separators": {
+            "slash": 5114
+          },
+          "lengths": {
+            "3": 11,
+            "4": 180,
+            "5": 1535,
+            "6": 3385,
+            "7": 3
+          },
+          "prefix_lengths": {
+            "1": 11,
+            "2": 203,
+            "3": 1520,
+            "4": 3380
+          }
+        }
+      ]
+    },
+    {
+      "name": "RAZAS.DBF",
+      "size": 32518,
+      "modified": "2026-08-27T20:02:38-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1926-08-27",
+        "header_bytes": 360,
+        "record_bytes": 81,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 397,
+        "computed_from_size": 397,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "NOMBRE",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        },
+        {
+          "name": "ESPECIE",
+          "type": "C",
+          "length": 30,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "SQLTEST.DBF",
+      "size": 1348,
+      "modified": "2026-11-10T12:04:10-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1926-11-10",
+        "header_bytes": 488,
+        "record_bytes": 859,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 1,
+        "computed_from_size": 1,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "IDSQL",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "RUTA",
+          "type": "C",
+          "length": 200,
+          "decimals": 0
+        },
+        {
+          "name": "PUERTO",
+          "type": "C",
+          "length": 200,
+          "decimals": 0
+        },
+        {
+          "name": "USUARIO",
+          "type": "C",
+          "length": 200,
+          "decimals": 0
+        },
+        {
+          "name": "CLAVE",
+          "type": "C",
+          "length": 200,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "TIPOART.DBF",
+      "size": 4460,
+      "modified": "2023-01-18T20:25:44-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1923-01-18",
+        "header_bytes": 360,
+        "record_bytes": 82,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 50,
+        "computed_from_size": 50,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "TIPO",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "FORMATO",
+          "type": "C",
+          "length": 1,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "VACUNAS.DBF",
+      "size": 1300153,
+      "modified": "2026-11-16T16:46:40-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1926-11-16",
+        "header_bytes": 680,
+        "record_bytes": 337,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 3856,
+        "computed_from_size": 3856,
+        "match": true,
+        "deleted": 101
+      },
+      "fields": [
+        {
+          "name": "ID_VACUNA",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGOPACI",
+          "type": "C",
+          "length": 9,
+          "decimals": 0
+        },
+        {
+          "name": "VACUNA",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA_APLI",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA_REVA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "MARCA",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "REVACUNA",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "ES_VACUNA",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "CANCELADA",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "AVISADO",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "FORMA_AVIS",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA_AVIS",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "agenda.dbf",
+      "size": 900995,
+      "modified": "2026-11-01T13:26:20-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1926-11-01",
+        "header_bytes": 776,
+        "record_bytes": 374,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 2407,
+        "computed_from_size": 2407,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_AGENDA",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "NOMBRE",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "EMPRESA",
+          "type": "C",
+          "length": 30,
+          "decimals": 0
+        },
+        {
+          "name": "CUIT",
+          "type": "C",
+          "length": 20,
+          "decimals": 0
+        },
+        {
+          "name": "DIRECCION",
+          "type": "C",
+          "length": 30,
+          "decimals": 0
+        },
+        {
+          "name": "COD_POSTAL",
+          "type": "C",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "LOCALIDAD",
+          "type": "C",
+          "length": 20,
+          "decimals": 0
+        },
+        {
+          "name": "PROVINCIA",
+          "type": "C",
+          "length": 20,
+          "decimals": 0
+        },
+        {
+          "name": "PAIS",
+          "type": "C",
+          "length": 25,
+          "decimals": 0
+        },
+        {
+          "name": "TELEFONO1",
+          "type": "C",
+          "length": 25,
+          "decimals": 0
+        },
+        {
+          "name": "TELEFONO2",
+          "type": "C",
+          "length": 25,
+          "decimals": 0
+        },
+        {
+          "name": "TELEFONO3",
+          "type": "C",
+          "length": 25,
+          "decimals": 0
+        },
+        {
+          "name": "FAX",
+          "type": "C",
+          "length": 25,
+          "decimals": 0
+        },
+        {
+          "name": "PALABRACLA",
+          "type": "C",
+          "length": 30,
+          "decimals": 0
+        },
+        {
+          "name": "EMAIL",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "alarmas.dbf",
+      "size": 648,
+      "modified": "2021-06-21T10:47:56-03:00",
+      "memo": {
+        "name": "alarmas.FPT",
+        "size": 512
+      },
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 648,
+        "record_bytes": 448,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_ALARMA",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "HORA",
+          "type": "C",
+          "length": 5,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGO",
+          "type": "N",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "MOTIVO",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "DETALLE",
+          "type": "M",
+          "length": 4,
+          "decimals": 0
+        },
+        {
+          "name": "ORIGEN",
+          "type": "C",
+          "length": 12,
+          "decimals": 0
+        },
+        {
+          "name": "AUX1",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "AUX2",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "AUX3",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "AUX4",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "avisos.dbf",
+      "size": 736,
+      "modified": "2020-06-02T06:15:50-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1920-06-02",
+        "header_bytes": 328,
+        "record_bytes": 51,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 8,
+        "computed_from_size": 8,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "FORMA",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "ayuda.dbf",
+      "size": 921,
+      "modified": "2007-10-02T09:58:10-03:00",
+      "memo": {
+        "name": "ayuda.FPT",
+        "size": 27264
+      },
+      "header": {
+        "version": "0x30",
+        "updated_at": "1907-10-02",
+        "header_bytes": 360,
+        "record_bytes": 8,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 70,
+        "computed_from_size": 70,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "CODIGO",
+          "type": "N",
+          "length": 3,
+          "decimals": 0
+        },
+        {
+          "name": "TEXTO",
+          "type": "M",
+          "length": 4,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "barras_aux.dbf",
+      "size": 424,
+      "modified": "2023-01-18T20:25:44-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1923-01-18",
+        "header_bytes": 424,
+        "record_bytes": 142,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ARTICULO",
+          "type": "C",
+          "length": 60,
+          "decimals": 0
+        },
+        {
+          "name": "COD_BARRAS",
+          "type": "C",
+          "length": 60,
+          "decimals": 0
+        },
+        {
+          "name": "CANT",
+          "type": "N",
+          "length": 6,
+          "decimals": 0
+        },
+        {
+          "name": "PRECIO",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "barras_aux2.dbf",
+      "size": 424,
+      "modified": "2023-01-18T20:25:44-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1923-01-18",
+        "header_bytes": 424,
+        "record_bytes": 154,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "NUMERO",
+          "type": "N",
+          "length": 3,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGO",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        },
+        {
+          "name": "LEYENDA",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGO2",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "cajascer2.dbf",
+      "size": 456,
+      "modified": "2021-06-21T10:48:47-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 456,
+        "record_bytes": 89,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_CAJACER",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "NOMBRE",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "IMPORTE",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "GANANCIA",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "cartas.dbf",
+      "size": 366,
+      "modified": "2023-01-18T20:25:44-03:00",
+      "memo": {
+        "name": "cartas.FPT",
+        "size": 768
+      },
+      "header": {
+        "version": "0x30",
+        "updated_at": "1923-01-18",
+        "header_bytes": 360,
+        "record_bytes": 6,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 1,
+        "computed_from_size": 1,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "COD",
+          "type": "N",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "CERTMED",
+          "type": "M",
+          "length": 4,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "cia_cel.dbf",
+      "size": 5254,
+      "modified": "2011-06-04T15:54:56-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1911-06-04",
+        "header_bytes": 424,
+        "record_bytes": 161,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 30,
+        "computed_from_size": 30,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_CIA",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "PAIS",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        },
+        {
+          "name": "CIA",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        },
+        {
+          "name": "SERVIDOR",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "compras.dbf",
+      "size": 488,
+      "modified": "2021-06-21T10:49:10-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 488,
+        "record_bytes": 209,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_COMPRA",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "DETALLE",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "CANTIDAD",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "IMPORTE",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "RUBRO",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "config.dbf",
+      "size": 2115,
+      "modified": "2021-06-21T10:50:32-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 872,
+        "record_bytes": 1243,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 1,
+        "computed_from_size": 1,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_CONFIG",
+          "type": "N",
+          "length": 3,
+          "decimals": 0
+        },
+        {
+          "name": "IMPRESION",
+          "type": "N",
+          "length": 2,
+          "decimals": 0
+        },
+        {
+          "name": "COPIAS",
+          "type": "N",
+          "length": 3,
+          "decimals": 0
+        },
+        {
+          "name": "IVAAUX",
+          "type": "N",
+          "length": 6,
+          "decimals": 2
+        },
+        {
+          "name": "CONDIVA",
+          "type": "N",
+          "length": 2,
+          "decimals": 0
+        },
+        {
+          "name": "LINEA1",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "LINEA2",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "LINEA3",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "LINEA4",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "LINEA5",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "LINEA6",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "PIE",
+          "type": "C",
+          "length": 200,
+          "decimals": 0
+        },
+        {
+          "name": "PIE2",
+          "type": "C",
+          "length": 200,
+          "decimals": 0
+        },
+        {
+          "name": "ULTFACT",
+          "type": "N",
+          "length": 20,
+          "decimals": 0
+        },
+        {
+          "name": "CLIENTE",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        },
+        {
+          "name": "DIRECCION",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        },
+        {
+          "name": "LEYENDACLI",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "DESCU",
+          "type": "N",
+          "length": 6,
+          "decimals": 2
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "config2.dbf",
+      "size": 1486,
+      "modified": "2021-06-21T10:53:28-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 584,
+        "record_bytes": 901,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 1,
+        "computed_from_size": 1,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "LINEA7",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "LINEA8",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "LINEA9",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "LINEA10",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "PIE3",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "PIE4",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "PIE5",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "PIE6",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "PIE7",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "control.dbf",
+      "size": 488,
+      "modified": "2021-06-21T10:53:34-03:00",
+      "memo": {
+        "name": "control.FPT",
+        "size": 512
+      },
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 488,
+        "record_bytes": 133,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_CONTROL",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGOPACI",
+          "type": "C",
+          "length": 9,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "MOTIVO",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "DESCRIP",
+          "type": "M",
+          "length": 4,
+          "decimals": 0
+        },
+        {
+          "name": "CANCELADO",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "coti.dbf",
+      "size": 382,
+      "modified": "2022-09-25T19:47:02-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1922-09-25",
+        "header_bytes": 360,
+        "record_bytes": 21,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 1,
+        "computed_from_size": 1,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_COTI",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "COTIZA",
+          "type": "N",
+          "length": 10,
+          "decimals": 3
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "cta_tipo.dbf",
+      "size": 328,
+      "modified": "2020-06-08T14:30:56-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1920-06-08",
+        "header_bytes": 328,
+        "record_bytes": 11,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "CODIGO",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "ctacte2.dbf",
+      "size": 744,
+      "modified": "2021-06-21T10:53:48-03:00",
+      "memo": {
+        "name": "ctacte2.FPT",
+        "size": 512
+      },
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 744,
+        "record_bytes": 389,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_CTACTE",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGO",
+          "type": "N",
+          "length": 6,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "DESCRIP",
+          "type": "C",
+          "length": 254,
+          "decimals": 0
+        },
+        {
+          "name": "CANTIDAD",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "IMPORTE",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "TIPO",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "COSTO",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "ID_ART",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "RECIBO",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "RECIBO_TEX",
+          "type": "M",
+          "length": 4,
+          "decimals": 0
+        },
+        {
+          "name": "COSTO_REAL",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "ID_FVEN",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "IVA",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "datosest.dbf",
+      "size": 2152,
+      "modified": "2022-08-12T12:43:23-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1922-08-12",
+        "header_bytes": 936,
+        "record_bytes": 1216,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 1,
+        "computed_from_size": 1,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "COD",
+          "type": "N",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "ESTABLE",
+          "type": "C",
+          "length": 254,
+          "decimals": 0
+        },
+        {
+          "name": "DIRECCION",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "TELEFONO",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "LOCALIDAD",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "PROVINCIA",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "PAIS",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "CP",
+          "type": "C",
+          "length": 20,
+          "decimals": 0
+        },
+        {
+          "name": "PROFACARGO",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "EMAIL",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "CLA1",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "CLA2",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "CLA3",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "CLA4",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "CLA5",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA1",
+          "type": "C",
+          "length": 16,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA2",
+          "type": "C",
+          "length": 16,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA3",
+          "type": "C",
+          "length": 16,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA4",
+          "type": "C",
+          "length": 16,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA5",
+          "type": "C",
+          "length": 16,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "diag_estad.dbf",
+      "size": 681,
+      "modified": "2022-03-01T23:58:52-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1922-03-01",
+        "header_bytes": 424,
+        "record_bytes": 128,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 2,
+        "computed_from_size": 2,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_DIAGEST",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGOPACI",
+          "type": "C",
+          "length": 9,
+          "decimals": 0
+        },
+        {
+          "name": "DIAG",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "diagnosticos.dbf",
+      "size": 392,
+      "modified": "2021-06-21T10:54:35-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 392,
+        "record_bytes": 117,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_DIAG",
+          "type": "N",
+          "length": 6,
+          "decimals": 0
+        },
+        {
+          "name": "DIAG",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "CANTIDAD",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "email.dbf",
+      "size": 949,
+      "modified": "2020-10-12T05:35:43-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1920-10-12",
+        "header_bytes": 488,
+        "record_bytes": 461,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 1,
+        "computed_from_size": 1,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_EMAIL",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "NOMBRE",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "EMAIL",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "SERVER",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "USUARIO",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "CLAVE",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "enfer.dbf",
+      "size": 1000,
+      "modified": "2021-06-21T11:20:08-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 1000,
+        "record_bytes": 1687,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_ENFER",
+          "type": "N",
+          "length": 6,
+          "decimals": 0
+        },
+        {
+          "name": "ENFERMEDAD",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "VACUNA1",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "VACUNA2",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "VACUNA3",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "VACUNA4",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "VACUNA5",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "VACUNA6",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "VACUNA7",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "VACUNA8",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "VACUNA9",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "VACUNA10",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "VACUNA11",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "VACUNA12",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "VACUNA13",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "VACUNA14",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "VACUNA15",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "VACUNA16",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "VACUNA17",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "VACUNA18",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "VACUNA19",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "VACUNA20",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "entmvd.dbf",
+      "size": 680,
+      "modified": "2023-01-18T20:25:45-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1923-01-18",
+        "header_bytes": 680,
+        "record_bytes": 208,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_REG",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "IDENT",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "DESCRIP",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "CANTIDAD",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "UNITARIO",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "IMP_SIVA",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "IVA",
+          "type": "N",
+          "length": 6,
+          "decimals": 2
+        },
+        {
+          "name": "IMPORTE",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "CAJADIARIA",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "ID_ART",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "COSTO",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "UNI_REAL",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "entradas.dbf",
+      "size": 776,
+      "modified": "2021-06-21T11:20:21-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 776,
+        "record_bytes": 370,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_ENT",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "DESCRIP",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "CANTIDAD",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "IMPORTE",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "CAJADIARIA",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "ID_ART",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "COSTO",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "ID_CLIENTE",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "VENDEDOR",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "USUARIO",
+          "type": "C",
+          "length": 20,
+          "decimals": 0
+        },
+        {
+          "name": "FORMA1",
+          "type": "C",
+          "length": 30,
+          "decimals": 0
+        },
+        {
+          "name": "FORMA2",
+          "type": "C",
+          "length": 30,
+          "decimals": 0
+        },
+        {
+          "name": "ID_FVEN",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "IVA",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "especies.dbf",
+      "size": 1228,
+      "modified": "2026-06-09T21:57:49-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1926-06-09",
+        "header_bytes": 328,
+        "record_bytes": 31,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 29,
+        "computed_from_size": 29,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ESPECIE",
+          "type": "C",
+          "length": 30,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "fact_venta.dbf",
+      "size": 840,
+      "modified": "2021-06-21T11:20:36-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 840,
+        "record_bytes": 544,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_FVEN",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "NUMERO",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGO",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "CLIENTE",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "DIRECCION",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "DATOSFAC",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "VENDEDOR",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "FORMA1",
+          "type": "C",
+          "length": 30,
+          "decimals": 0
+        },
+        {
+          "name": "FORMA2",
+          "type": "C",
+          "length": 30,
+          "decimals": 0
+        },
+        {
+          "name": "DESCU",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "TOTAL",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "TOTAL_DESC",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "IVA",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "TOT_SIVA",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "EXENTO",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "IEPS",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "facturas.dbf",
+      "size": 552,
+      "modified": "2021-06-21T11:20:41-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 552,
+        "record_bytes": 182,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_FACT",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "ID_PROVE",
+          "type": "N",
+          "length": 6,
+          "decimals": 0
+        },
+        {
+          "name": "ID_MOV",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "ARTICULO",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "CANTIDAD",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "IMP_UNIT",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "IMPORTE",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "ID_ART",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "facturas_aux4.dbf",
+      "size": 616,
+      "modified": "2023-01-18T20:25:45-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1923-01-18",
+        "header_bytes": 616,
+        "record_bytes": 191,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_FACT",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "ID_MOV",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "ID_ART",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "ARTICULO",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "CANTIDAD",
+          "type": "N",
+          "length": 10,
+          "decimals": 2
+        },
+        {
+          "name": "IMP_UNIT",
+          "type": "N",
+          "length": 10,
+          "decimals": 2
+        },
+        {
+          "name": "IMPORTE",
+          "type": "N",
+          "length": 10,
+          "decimals": 2
+        },
+        {
+          "name": "COSTO",
+          "type": "N",
+          "length": 10,
+          "decimals": 2
+        },
+        {
+          "name": "PRECIO2",
+          "type": "N",
+          "length": 10,
+          "decimals": 2
+        },
+        {
+          "name": "PRECIO3",
+          "type": "N",
+          "length": 10,
+          "decimals": 2
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "forma1.dbf",
+      "size": 500,
+      "modified": "2021-06-21T11:21:14-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 360,
+        "record_bytes": 35,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 4,
+        "computed_from_size": 4,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_FORMA1",
+          "type": "N",
+          "length": 4,
+          "decimals": 0
+        },
+        {
+          "name": "FORMA1",
+          "type": "C",
+          "length": 30,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "forma2.dbf",
+      "size": 548,
+      "modified": "2021-06-21T11:21:21-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 392,
+        "record_bytes": 39,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 4,
+        "computed_from_size": 4,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_FORMA2",
+          "type": "N",
+          "length": 4,
+          "decimals": 0
+        },
+        {
+          "name": "ID_FORMA1",
+          "type": "N",
+          "length": 4,
+          "decimals": 0
+        },
+        {
+          "name": "FORMA2",
+          "type": "C",
+          "length": 30,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "guarderia.dbf",
+      "size": 904,
+      "modified": "2021-06-21T11:24:38-03:00",
+      "memo": {
+        "name": "guarderia.FPT",
+        "size": 512
+      },
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 904,
+        "record_bytes": 773,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "CODIGO",
+          "type": "N",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA_ING",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "CLIENTE",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "DIRECCION",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "TELEFONO",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "PACIENTE",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "ESPECIE",
+          "type": "C",
+          "length": 20,
+          "decimals": 0
+        },
+        {
+          "name": "RAZA",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "SEXO",
+          "type": "C",
+          "length": 20,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA_NAC",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "COSTO_DIA",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "FECHA_SALE",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "ALIMENTO",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "NOTAS",
+          "type": "M",
+          "length": 4,
+          "decimals": 0
+        },
+        {
+          "name": "SALIO",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "AUX1",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "AUX2",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "AUX3",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "AUX4",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "interna.dbf",
+      "size": 904,
+      "modified": "2021-06-21T11:24:42-03:00",
+      "memo": {
+        "name": "interna.FPT",
+        "size": 512
+      },
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 904,
+        "record_bytes": 757,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "CODIGO",
+          "type": "N",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA_ING",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "CLIENTE",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "DIRECCION",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "TELEFONO",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "PACIENTE",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "ESPECIE",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "RAZA",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "SEXO",
+          "type": "C",
+          "length": 20,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA_NAC",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "COSTO_DIA",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "FECHA_SALE",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "MEDICACION",
+          "type": "M",
+          "length": 4,
+          "decimals": 0
+        },
+        {
+          "name": "NOTAS",
+          "type": "M",
+          "length": 4,
+          "decimals": 0
+        },
+        {
+          "name": "SALIO",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "AUX1",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "AUX2",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "AUX3",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "AUX4",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "ivas.dbf",
+      "size": 402,
+      "modified": "2021-06-21T11:25:06-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 360,
+        "record_bytes": 14,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 3,
+        "computed_from_size": 3,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_IVA",
+          "type": "N",
+          "length": 3,
+          "decimals": 0
+        },
+        {
+          "name": "IVA",
+          "type": "N",
+          "length": 10,
+          "decimals": 2
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "log_vetter.dbf",
+      "size": 89538,
+      "modified": "2026-10-28T11:34:58-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1926-10-28",
+        "header_bytes": 392,
+        "record_bytes": 283,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 315,
+        "computed_from_size": 315,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "FECHA",
+          "type": "T",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "USUARIO",
+          "type": "C",
+          "length": 20,
+          "decimals": 0
+        },
+        {
+          "name": "DETALLE",
+          "type": "C",
+          "length": 254,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "memomes.dbf",
+      "size": 360,
+      "modified": "2021-06-21T11:25:24-03:00",
+      "memo": {
+        "name": "memomes.FPT",
+        "size": 512
+      },
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 360,
+        "record_bytes": 13,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "FECHA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "DESCRIPCIO",
+          "type": "M",
+          "length": 4,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "mutual_clientes.dbf",
+      "size": 680,
+      "modified": "2021-06-21T11:25:35-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 680,
+        "record_bytes": 431,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_MUTUAL",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "NRO_SOCIO",
+          "type": "C",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGO",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA_ALTA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA_BAJA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "MOTIV_BAJA",
+          "type": "C",
+          "length": 254,
+          "decimals": 0
+        },
+        {
+          "name": "ID_PLAN",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "IMP_CUOTA",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "ULT_PAGO",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "SALDO",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "DOMI_FACT",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "VTO",
+          "type": "N",
+          "length": 2,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "mutual_config.dbf",
+      "size": 1643,
+      "modified": "2017-07-10T14:48:53-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1917-07-10",
+        "header_bytes": 520,
+        "record_bytes": 1123,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 1,
+        "computed_from_size": 1,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_MUT",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "NOMBRE",
+          "type": "C",
+          "length": 254,
+          "decimals": 0
+        },
+        {
+          "name": "DIRECCION",
+          "type": "C",
+          "length": 200,
+          "decimals": 0
+        },
+        {
+          "name": "TELEFONO",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        },
+        {
+          "name": "EMAIL",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "LOGO",
+          "type": "C",
+          "length": 254,
+          "decimals": 0
+        },
+        {
+          "name": "COMPROBANT",
+          "type": "C",
+          "length": 254,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "mutual_factura.dbf",
+      "size": 616,
+      "modified": "2021-06-21T11:25:47-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 616,
+        "record_bytes": 129,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_MUTFACT",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "ID_MUTUAL",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "PLAN",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        },
+        {
+          "name": "IMPORTE",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "PERIODO",
+          "type": "C",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "VTO1",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "VTO2",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "PAGO",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA_PAGO",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "mutual_pacientes.dbf",
+      "size": 392,
+      "modified": "2021-06-21T11:25:51-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 392,
+        "record_bytes": 28,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_MUTUAL",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGOPACI",
+          "type": "C",
+          "length": 9,
+          "decimals": 0
+        },
+        {
+          "name": "ULT_USO",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "mutual_planes.dbf",
+      "size": 392,
+      "modified": "2021-06-21T11:26:04-03:00",
+      "memo": {
+        "name": "mutual_planes.FPT",
+        "size": 512
+      },
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 392,
+        "record_bytes": 65,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_PLAN",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "PLAN",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        },
+        {
+          "name": "DETALLE",
+          "type": "M",
+          "length": 4,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "paices.dbf",
+      "size": 1451,
+      "modified": "2007-10-22T14:02:00-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1907-10-22",
+        "header_bytes": 328,
+        "record_bytes": 51,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 22,
+        "computed_from_size": 22,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "PAIS",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "parametros.dbf",
+      "size": 6723,
+      "modified": "2023-01-31T12:26:44-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1923-01-31",
+        "header_bytes": 392,
+        "record_bytes": 211,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 30,
+        "computed_from_size": 30,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_PARAM",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "PARAMETRO",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "VALOR",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "pelu.dbf",
+      "size": 584,
+      "modified": "2021-06-21T11:38:33-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 584,
+        "record_bytes": 218,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_PELU",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGOPACI",
+          "type": "C",
+          "length": 9,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "IMPORTE",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "DESCRIP",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "ID_PELUQUE",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "PELUQUERO",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        },
+        {
+          "name": "COMISION",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "TIPO",
+          "type": "C",
+          "length": 20,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "peluqueros.dbf",
+      "size": 456,
+      "modified": "2021-06-21T11:38:37-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 456,
+        "record_bytes": 361,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_PELU",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "PELUQUERO",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        },
+        {
+          "name": "DOMICILIO",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "TELEFONO",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "EMAIL",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "plantillas_rev.dbf",
+      "size": 1487,
+      "modified": "2012-01-29T23:59:08-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1912-01-29",
+        "header_bytes": 392,
+        "record_bytes": 365,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 3,
+        "computed_from_size": 3,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_PLAN",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "NOMBRE",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "UBICACION",
+          "type": "C",
+          "length": 254,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "prove.dbf",
+      "size": 680,
+      "modified": "2021-06-21T11:46:36-03:00",
+      "memo": {
+        "name": "prove.FPT",
+        "size": 512
+      },
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 680,
+        "record_bytes": 480,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_PROVE",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "NOMBRE",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "EMPRESA",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "DIRECCION",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "TELEFONO",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "LOCALIDAD",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "PROVINCIA",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "COD_POSTAL",
+          "type": "C",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "CUIT",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "EMAIL",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "OTROS",
+          "type": "M",
+          "length": 4,
+          "decimals": 0
+        },
+        {
+          "name": "SALDO",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "prove_mov.dbf",
+      "size": 552,
+      "modified": "2021-06-21T11:46:39-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 552,
+        "record_bytes": 146,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_MOV",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "ID_PROVE",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "COMP_NRO",
+          "type": "C",
+          "length": 20,
+          "decimals": 0
+        },
+        {
+          "name": "IMPORTE",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "NOTAS",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "TIPO_COMP",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "DEPOSITO",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "puntos.dbf",
+      "size": 488,
+      "modified": "2021-06-21T11:46:43-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 488,
+        "record_bytes": 249,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_PUNTOS",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGO",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "DETALLE",
+          "type": "C",
+          "length": 200,
+          "decimals": 0
+        },
+        {
+          "name": "ENTRADA",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "SALIDA",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "rubros.dbf",
+      "size": 1346,
+      "modified": "2016-11-12T19:03:26-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1916-11-12",
+        "header_bytes": 392,
+        "record_bytes": 106,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 9,
+        "computed_from_size": 9,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_RUBRO",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "RUBRO",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "IMPORTE",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "setup5.dbf",
+      "size": 1601,
+      "modified": "2026-11-17T18:40:30-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1926-11-17",
+        "header_bytes": 360,
+        "record_bytes": 31,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 40,
+        "computed_from_size": 40,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "TABLA",
+          "type": "C",
+          "length": 20,
+          "decimals": 0
+        },
+        {
+          "name": "VALOR",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "sexo.dbf",
+      "size": 515,
+      "modified": "2007-11-16T15:00:26-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1907-11-16",
+        "header_bytes": 328,
+        "record_bytes": 31,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 6,
+        "computed_from_size": 6,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "SEXO",
+          "type": "C",
+          "length": 30,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "sin_vacunar.dbf",
+      "size": 520,
+      "modified": "2007-10-31T14:42:46-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1904-07-29",
+        "header_bytes": 520,
+        "record_bytes": 267,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "CLIENTE",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "PACIENTE",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "ESPECIE",
+          "type": "C",
+          "length": 20,
+          "decimals": 0
+        },
+        {
+          "name": "DIRECCION",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "TELEFONO",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "LOCALIDAD",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "CODCLIE",
+          "type": "N",
+          "length": 6,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "sms.dbf",
+      "size": 648,
+      "modified": "2014-03-18T18:13:32-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1914-03-18",
+        "header_bytes": 648,
+        "record_bytes": 516,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "SESION",
+          "type": "N",
+          "length": 15,
+          "decimals": 0
+        },
+        {
+          "name": "CLIENTE",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "CELULAR",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        },
+        {
+          "name": "CIA_CEL",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        },
+        {
+          "name": "MAIL",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "PACIENTE",
+          "type": "C",
+          "length": 30,
+          "decimals": 0
+        },
+        {
+          "name": "DIRECCION",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "TELEFONO",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "LOCALIDAD",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "PROVINCIA",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "CODPOSTAL",
+          "type": "C",
+          "length": 10,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "stock.dbf",
+      "size": 123815,
+      "modified": "2022-08-21T10:31:04-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1922-08-21",
+        "header_bytes": 904,
+        "record_bytes": 482,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 255,
+        "computed_from_size": 255,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_ART",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGO",
+          "type": "C",
+          "length": 30,
+          "decimals": 0
+        },
+        {
+          "name": "ARTICULO",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "PRECIO",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "COSTO",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "STOCK",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "STOCK_MIN",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "TIPO",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "MARCA",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "CANTIDAD",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "IVA",
+          "type": "N",
+          "length": 3,
+          "decimals": 0
+        },
+        {
+          "name": "EST_IMP",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "EST_COSTO",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "VTO",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "DEPOSITO",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "PRECIO2",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "PRECIO3",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "UBICA",
+          "type": "C",
+          "length": 30,
+          "decimals": 0
+        },
+        {
+          "name": "IEPS",
+          "type": "N",
+          "length": 10,
+          "decimals": 2
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "tipos.dbf",
+      "size": 1313,
+      "modified": "2026-07-27T16:11:24-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1925-09-03",
+        "header_bytes": 328,
+        "record_bytes": 41,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 24,
+        "computed_from_size": 24,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "TIPO",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "tipos_atp.dbf",
+      "size": 823,
+      "modified": "2026-01-09T20:36:45-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1926-01-09",
+        "header_bytes": 392,
+        "record_bytes": 86,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 5,
+        "computed_from_size": 5,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ATP",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "DIAS",
+          "type": "N",
+          "length": 3,
+          "decimals": 0
+        },
+        {
+          "name": "TIPO",
+          "type": "N",
+          "length": 2,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "tipos_vac.dbf",
+      "size": 2969,
+      "modified": "2026-06-16T15:05:30-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1926-06-16",
+        "header_bytes": 392,
+        "record_bytes": 184,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 14,
+        "computed_from_size": 14,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "VACUNA",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "DATOS_VAC",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "DIAS",
+          "type": "N",
+          "length": 3,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "turnope.dbf",
+      "size": 1096,
+      "modified": "2021-06-21T11:58:46-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 1096,
+        "record_bytes": 751,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_TURNOPE",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "HORA",
+          "type": "C",
+          "length": 5,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGOCLI",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "CLIENTE",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGOPACI",
+          "type": "C",
+          "length": 9,
+          "decimals": 0
+        },
+        {
+          "name": "PACIENTE",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "NOTAS",
+          "type": "C",
+          "length": 254,
+          "decimals": 0
+        },
+        {
+          "name": "DIRECCION",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "TELEFONO",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        },
+        {
+          "name": "ID_PELUQUE",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "PELUQUERO",
+          "type": "C",
+          "length": 50,
+          "decimals": 0
+        },
+        {
+          "name": "NUMERO",
+          "type": "N",
+          "length": 6,
+          "decimals": 0
+        },
+        {
+          "name": "CORREA",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "COLLAR",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "AVISADO",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "RETIRADO",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "BANO",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "CORTE",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "PAGO",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "IMP_BANO",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "IMP_CORTE",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "IMPCOMIBA",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "IMPCOMICO",
+          "type": "N",
+          "length": 15,
+          "decimals": 4
+        },
+        {
+          "name": "INGRESADO",
+          "type": "L",
+          "length": 1,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "turnos.dbf",
+      "size": 584,
+      "modified": "2021-06-21T11:58:50-03:00",
+      "memo": {
+        "name": "turnos.FPT",
+        "size": 512
+      },
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 584,
+        "record_bytes": 351,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 0,
+        "computed_from_size": 0,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_TURNO",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "ID_USU",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "FECHA",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "HORA",
+          "type": "N",
+          "length": 4,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGO",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "DETALLE",
+          "type": "C",
+          "length": 254,
+          "decimals": 0
+        },
+        {
+          "name": "INFO",
+          "type": "M",
+          "length": 4,
+          "decimals": 0
+        },
+        {
+          "name": "ESTADO",
+          "type": "C",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "PACIENTE",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "ultireva.dbf",
+      "size": 378,
+      "modified": "2021-06-21T11:58:56-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 360,
+        "record_bytes": 17,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 1,
+        "computed_from_size": 1,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "INICIO",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "FIN",
+          "type": "D",
+          "length": 8,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "usuarios.dbf",
+      "size": 531,
+      "modified": "2026-11-14T11:45:20-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1926-11-14",
+        "header_bytes": 456,
+        "record_bytes": 75,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 1,
+        "computed_from_size": 1,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_USUARIO",
+          "type": "N",
+          "length": 6,
+          "decimals": 0
+        },
+        {
+          "name": "USUARIO",
+          "type": "C",
+          "length": 20,
+          "decimals": 0
+        },
+        {
+          "name": "PASS",
+          "type": "C",
+          "length": 20,
+          "decimals": 0
+        },
+        {
+          "name": "ULTIMO_IN",
+          "type": "T",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "NIVEL",
+          "type": "C",
+          "length": 20,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "usuturno.dbf",
+      "size": 1215,
+      "modified": "2021-06-21T12:08:09-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 424,
+        "record_bytes": 113,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 7,
+        "computed_from_size": 7,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "ID_USU",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "USUTURNO",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        },
+        {
+          "name": "PREDET",
+          "type": "N",
+          "length": 1,
+          "decimals": 0
+        },
+        {
+          "name": "ACTIVO",
+          "type": "N",
+          "length": 1,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "vendedores.dbf",
+      "size": 429,
+      "modified": "2021-06-21T12:08:31-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1921-06-21",
+        "header_bytes": 328,
+        "record_bytes": 101,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 1,
+        "computed_from_size": 1,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "VENDEDOR",
+          "type": "C",
+          "length": 100,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "veterinarios.dbf",
+      "size": 491,
+      "modified": "2022-02-21T17:30:01-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1922-02-21",
+        "header_bytes": 328,
+        "record_bytes": 81,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 2,
+        "computed_from_size": 2,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "VETE",
+          "type": "C",
+          "length": 80,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    },
+    {
+      "name": "visitas.dbf",
+      "size": 14014957,
+      "modified": "2026-11-18T14:23:12-03:00",
+      "memo": null,
+      "header": {
+        "version": "0x30",
+        "updated_at": "1926-11-16",
+        "header_bytes": 488,
+        "record_bytes": 362,
+        "language_driver": "0x03",
+        "encoding": "CP1252"
+      },
+      "records": {
+        "header": 38714,
+        "computed_from_size": 38714,
+        "match": true,
+        "deleted": 0
+      },
+      "fields": [
+        {
+          "name": "FECHA",
+          "type": "T",
+          "length": 8,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGO",
+          "type": "N",
+          "length": 10,
+          "decimals": 0
+        },
+        {
+          "name": "CLIENTE",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "CODIGOPACI",
+          "type": "C",
+          "length": 9,
+          "decimals": 0
+        },
+        {
+          "name": "PACIENTE",
+          "type": "C",
+          "length": 40,
+          "decimals": 0
+        },
+        {
+          "name": "DETALLE",
+          "type": "C",
+          "length": 254,
+          "decimals": 0
+        }
+      ],
+      "stats": []
+    }
+  ],
+  "errors": []
+}

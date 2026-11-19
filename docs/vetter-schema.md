@@ -10,13 +10,12 @@ corrió en local. Cada fila que se confirme se marca acá con fecha y evidencia.
 - Vetter 5.11.0, Visual FoxPro 7. Tablas `.DBF` + memo `.FPT`.
 - Producción en `\\Srvarchvete01\c\vetter5` (unidad `Z:`), no en la PC.
 - Sin fecha de modificación por fila. La detección de cambios es por hash.
-- Encoding: por confirmar. El header del DBF trae el language driver (byte 29):
-  CP850 y CP1252 son los candidatos. **La decodificación a UTF-8 pasa antes del
-  hash.**
-- Borrado lógico: por confirmar si Vetter marca el primer byte con `0x2A` o si
-  hace `PACK`. Si hace `PACK`, la fila desaparece y no se distingue de "nunca
-  existió"; el sync nunca borra, así que quedaría fantasma. Ver
-  `open-questions.md`.
+- Encoding: **CP1252** (`0x03`) en los 75 DBF, confirmado el 2026-11-18 con
+  `inspect`. **La decodificación a UTF-8 pasa antes del hash.**
+- Borrado lógico: **marca el primer byte con `0x2A`, no compacta**
+  (2026-11-18). Igual hay que vigilar `PACK`: si alguna vez corre, la fila
+  desaparece y el sync no se entera; el agente loguea `desaparecidas` por
+  corrida. Ver `open-questions.md`.
 
 ## Tablas de la lista blanca
 
@@ -36,15 +35,15 @@ Los inválidos se cuentan y se descartan.
 
 | Campo (hipótesis) | Tipo | Uso | Confirmado |
 |---|---|---|---|
-| `CODIGOPACI` | texto, ej. `1524/2` | `pets.vetter_id` | no |
+| `CODIGOPACI` | texto, ej. `1524/2` | `pets.vetter_id` | sí (2026-11-18) |
 | `NOMBRE` | texto | `pets.name` | no |
 | `ESPECIE` | texto | `pets.species` | no |
 | `RAZA` | texto | `pets.breed` | no |
 | `SEXO` | texto | pendiente de schema | no |
 
-Hipótesis fuerte: `CODIGOPACI` es `código de cliente / número de paciente`. Si
-se confirma, el tutor se puede derivar del código de paciente aunque la fila de
-`CLIENTES` no matchee. Es la pregunta más importante de la visita.
+`CODIGOPACI` es `código de cliente / número de paciente`: el prefijo coincide
+con `PACIENTES.CODIGO` y existe en `CLIENTES.CODIGO` en 5.114/5.114
+(confirmado el 2026-11-18).
 
 ### `VACUNAS`
 

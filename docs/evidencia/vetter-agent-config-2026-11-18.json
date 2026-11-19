@@ -1,0 +1,15 @@
+{
+  "z_path": "\\\\Srvarchvete01\\c\\vetter5\\Datos",
+  "copy_dir": "C:\\ProgramData\\vetter-agent\\copy",
+  "snapshot": "C:\\ProgramData\\vetter-agent\\snapshot.json",
+  "endpoint": "https://veterinariagachens.nevexlabs.workers.dev/api/sync/vetter",
+  "install_id": "pc-vete",
+  "max_rows_per_run": 5000,
+  "keys": {
+    "CLIENTES": "CODIGO",
+    "PACIENTES": "CODIGOPACI",
+    "VACUNAS": "ID_VACUNA",
+    "VISITAS": "CODIGO+FECHA",
+    "ADJUNTOS": "ID_ADJ"
+  }
+}
