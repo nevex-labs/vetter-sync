@@ -188,7 +188,7 @@ func TestAssetEligeElBinarioDeLaTarea(t *testing.T) {
 	// Un release viejo sin task_url no rompe: baja el de consola.
 	viejo := Release{URL: release.URL, SHA256: "consola"}
 
-	if url := viejo.Asset("vetter-agent-task.exe"); url != viejo.URL {
+	if url, _ := viejo.Asset("vetter-agent-task.exe"); url != viejo.URL {
 		t.Errorf("sin task_url: %q", url)
 	}
 }
