@@ -1,14 +1,13 @@
 # PC de la clínica — instalar y operar el agente
 
-> Estado: el `.exe` todavía no existe (fase 3 del `SPEC.md`). Esto es el
-> procedimiento objetivo; se ajusta cuando el binario exista y se pruebe en la
-> PC.
+> Estado: instalado y sincronizando desde el 2026-11-18 (agente 0.1.1). El
+> auto-update ya está en el binario: los releases nuevos llegan solos.
 
 ## Antes de tocar la PC
 
-1. **Ok escrito del veterinario** (Ley 25.326). Sin eso no se manda una fila.
-2. Dispositivo creado en el panel (Equipo → Dispositivos), una vez que esté el
-   ok. El panel muestra el secreto una sola vez.
+1. **Ok escrito del veterinario** (Ley 25.326). Está desde el 2026-11-18.
+2. Dispositivo creado en el panel (Equipo → Dispositivos). El panel muestra el
+   secreto una sola vez.
 3. Cuenta de servicio decidida (ver abajo).
 
 ## Layout
@@ -16,10 +15,13 @@
 ```
 C:\ProgramData\vetter-agent\
   vetter-agent.exe
+  vetter-agent-task.exe   (sin consola, el que corre la tarea)
   config.json
-  snapshot.db
+  secret.bin              (DPAPI, nunca sale de la PC)
+  snapshot.json
   copy\
   logs\
+  update.checked / update.attempts   (auto-update)
 ```
 
 `C:\ProgramData` no está sincronizado con OneDrive. No usar el Escritorio ni la
@@ -31,19 +33,37 @@ carpeta del usuario.
 {
   "z_path": "\\\\Srvarchvete01\\c\\vetter5\\Datos",
   "copy_dir": "C:\\ProgramData\\vetter-agent\\copy",
-  "snapshot_db": "C:\\ProgramData\\vetter-agent\\snapshot.db",
+  "snapshot": "C:\\ProgramData\\vetter-agent\\snapshot.json",
   "endpoint": "https://veterinariagachens.nevexlabs.workers.dev/api/sync/vetter",
-  "install_id": "pc-vete"
+  "install_id": "pc-vete",
+  "mirror_path": "C:\\Users\\usuario\\OneDrive\\BKP Vetter5\\Datos",
+  "max_rows_per_run": 5000,
+  "keys": {
+    "CLIENTES": "CODIGO",
+    "PACIENTES": "CODIGOPACI",
+    "VACUNAS": "ID_VACUNA",
+    "VISITAS": "CODIGO+FECHA",
+    "ADJUNTOS": "ID_ADJ"
+  }
 }
 ```
 
-El secreto no va en el JSON: se guarda con `vetter-agent pair` en el almacén de
-credenciales de la cuenta de la tarea.
+`mirror_path` es opcional: si está, cada corrida compara cuántos registros tiene
+cada tabla entre el UNC y OneDrive y lo manda en `agent_error` cuando divergen.
+Abre solo headers: no importa datos de la réplica.
+
+El secreto no va en el JSON: se guarda con `vetter-agent pair` en DPAPI, con ACL
+para la cuenta de la tarea.
 
 ## Cuenta y permisos
 
-- **Cuenta local dedicada**, sin OneDrive y sin sesión abierta. Si se usa la
-  cuenta del vete, un cambio de contraseña deja la tarea sin correr.
+Hoy corre con la cuenta `usuario`, la misma del `pair`, con la contraseña
+guardada en la tarea: arranca al iniciar Windows y no necesita que nadie abra
+sesión. Para eso está `agent/instalar-tarea.ps1` (ver abajo).
+
+- **Cuenta local dedicada** (opcional, más prolija): sin OneDrive y sin sesión.
+  Hay que correr `pair` con esa cuenta o darle lectura a `secret.bin`, y darle
+  lectura en el share.
 - **SYSTEM sirve para el UNC** solo si la cuenta de equipo tiene permiso en el
   share; no puede autenticarse con credenciales de usuario.
 - La cuenta necesita lectura en el share y escritura en `C:\ProgramData\vetter-agent`.
@@ -54,50 +74,40 @@ icacls "C:\ProgramData\vetter-agent" /grant:r "VETE-PC\vetter-agent:(OI)(CI)M"
 
 **El almacén de credenciales es por usuario.** Si la tarea corre con "no guardar
 contraseña" (S4U) o con otra cuenta, no puede descifrar lo que guardó `pair`.
-Opción que menos falla desatendida: DPAPI con scope `LocalMachine` y el archivo
-protegido por ACL para la cuenta de la tarea. `pair` tiene que terminar con un
-`schtasks /run` de la tarea, no con un POST desde la consola interactiva.
 
 ## Tarea programada
 
+La de la primera visita corre solo con la sesión de `usuario` iniciada. Para que
+corra sin sesión, con la misma cuenta:
+
 ```powershell
-$action = New-ScheduledTaskAction `
-  -Execute "C:\ProgramData\vetter-agent\vetter-agent.exe" `
-  -Argument 'sync --config "C:\ProgramData\vetter-agent\config.json"'
-
-$trigger = New-ScheduledTaskTrigger -AtStartup
-$trigger.Repetition = (New-ScheduledTaskTrigger -Once -At (Get-Date) `
-  -RepetitionInterval (New-TimeSpan -Minutes 5) `
-  -RepetitionDuration (New-TimeSpan -Days 3650)).Repetition
-
-$settings = New-ScheduledTaskSettingsSet `
-  -MultipleInstances IgnoreNew `
-  -StartWhenAvailable `
-  -RestartCount 3 `
-  -RestartInterval (New-TimeSpan -Minutes 1) `
-  -ExecutionTimeLimit (New-TimeSpan -Minutes 10)
-
-Register-ScheduledTask -TaskName "Vetter Sync" `
-  -Action $action -Trigger $trigger -Settings $settings `
-  -User "VETE-PC\vetter-agent" -Password (Read-Host -AsSecureString "Password")
+powershell -ExecutionPolicy Bypass -File C:\ProgramData\vetter-agent\instalar-tarea.ps1
 ```
 
-- Corre al iniciar y cada 5 minutos, aunque el usuario no tenga sesión.
-- Si falla, Task Scheduler reintenta 3 veces (1, 2 y 5 minutos).
-- `StartWhenAvailable`: si la PC estaba apagada, corre al volver.
+Pide la contraseña, registra "Vetter Sync" al iniciar y cada 15 minutos, una sola
+instancia, reintentos 1/2/5 min, límite de 10 minutos, y la arranca una vez para
+ver el resultado.
+
 - **Unidades mapeadas**: `Z:` es por sesión y una tarea desatendida no la ve.
   Por eso `z_path` va por UNC.
 - Una corrida perdida no necesita recuperación: la siguiente compara contra el
   snapshot y manda lo que cambió.
 - `Get-ScheduledTaskInfo -TaskName "Vetter Sync"` muestra el último código de
-  salida. `vetter-agent status --config ...` muestra el estado local.
+  salida.
+
+## Auto-update
+
+Cada 24 h, antes del sync, el agente consulta el release firmado. Si hay una
+versión mayor, la baja, verifica la firma y el sha256, y deja el binario nuevo
+para la corrida siguiente. **No hay que tocar la PC.** Si la versión nueva falla
+tres corridas seguidas, vuelve sola a la anterior (`vetter-agent.exe.old`).
 
 ## Verificar
 
 ```powershell
 # El endpoint está vivo y habla el contrato esperado
 Invoke-RestMethod -Uri "https://veterinariagachens.nevexlabs.workers.dev/api/sync/vetter"
-# → @{ ok = True; contract = 2 }
+# → @{ ok = True; contract = 3 }
 
 # Última corrida
 Get-ScheduledTaskInfo -TaskName "Vetter Sync"
