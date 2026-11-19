@@ -3,7 +3,7 @@
 > Generado por `veterinaria-gachen/scripts/vetter-contract.mjs`. **No editar a
 > mano**: se pisa. Regenerar en `veterinaria-gachen` con `pnpm vetter:contract`.
 >
-> Origen: `veterinaria-gachen@567082bac263` (2026-11-19).
+> Origen: `veterinaria-gachen@99d8c93248cb` (2026-11-19).
 > Versión del contrato: **3**.
 
 Este documento es lo que el agente de la PC necesita. El mapeo de las filas
@@ -33,6 +33,7 @@ GET  /api/sync/vetter
     {
       "tabla": "PACIENTES",
       "vetter_id": "1524/2",
+      "row_key": "1524/2",
       "hash": "9f2c…",
       "deleted": false,
       "data": { "NOMBRE": "Toby", "ESPECIE": "Canino" }
@@ -42,6 +43,10 @@ GET  /api/sync/vetter
 ```
 
 - Hasta **200 filas** por request y **1.000.000 bytes** de body.
+- `row_key` (opcional): identifica la fila en la zona de llegada. Si falta, se
+  usa `vetter_id`. Vetter tiene filas con el mismo `CODIGOPACI` (3) y visitas
+  con el mismo `CODIGO+FECHA` (3): viajan con `vetter_id#2`, y la viva se queda
+  la clave base. Las dos se guardan.
 - `data` es un **objeto** JSON: las columnas del DBF tal como vienen, ya
   decodificadas a UTF-8. No se manda el nombre de la tabla adentro de `data`.
 - `deleted`: `true` si el registro está marcado como borrado en el DBF.
@@ -114,8 +119,9 @@ fila. `received_at` es la última vez que **cambió el contenido**, no la últim
 vez que el agente lo mandó.
 
 ```sql
-CREATE TABLE vetter_rows (
+CREATE TABLE "vetter_rows" (
   source_table TEXT NOT NULL,
+  row_key TEXT NOT NULL,
   vetter_id TEXT NOT NULL,
   hash TEXT NOT NULL,
   data_json TEXT NOT NULL,
@@ -123,8 +129,9 @@ CREATE TABLE vetter_rows (
   received_at TEXT NOT NULL,
   applied_at TEXT,
   status TEXT NOT NULL DEFAULT 'pendiente'
-    CHECK (status IN ('pendiente', 'aplicado', 'ambiguo')), reason TEXT,
-  PRIMARY KEY (source_table, vetter_id)
+    CHECK (status IN ('pendiente', 'aplicado', 'ambiguo')),
+  reason TEXT,
+  PRIMARY KEY (source_table, row_key)
 ) WITHOUT ROWID;
 ```
 
