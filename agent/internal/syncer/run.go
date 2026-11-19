@@ -210,11 +210,36 @@ func (r *Runner) prepare(table string, snap *Snapshot) (TableReport, []Row, *Fil
 	return report, pending, &local.Stamp
 }
 
-// collect lee la copia y arma las filas que cambiaron. Si un vetter_id se
-// repite en la tabla gana la última, igual que en el Worker, salvo que la
-// última esté borrada y la anterior no: un borrado viejo no anula una fila viva.
+// collect lee la copia y arma las filas. Un `vetter_id` repetido no se colapsa:
+// viaja con `row_key` = `id#2`, `id#3`… y la fila viva se queda la clave base,
+// para que el dominio proyecte la viva y la repetida quede guardada.
+// assignRowKeys deja la viva (o la primera, si no hay ninguna) con la clave base
+// y numera las demás con `#n`.
+func assignRowKeys(rows []Row, id string, at []int) {
+	base := at[0]
+
+	for _, i := range at {
+		if !rows[i].Deleted {
+			base = i
+
+			break
+		}
+	}
+
+	n := 1
+
+	for _, i := range at {
+		if i == base {
+			continue
+		}
+
+		n++
+		rows[i].RowKey = fmt.Sprintf("%s#%d", id, n)
+	}
+}
+
 func collect(path, table, key string, snap *Snapshot, report *TableReport) ([]Row, error) {
-	seen := map[string]int{}
+	positions := map[string][]int{}
 	rows := make([]Row, 0, 64)
 	parts := strings.Split(key, "+")
 
@@ -236,19 +261,13 @@ func collect(path, table, key string, snap *Snapshot, report *TableReport) ([]Ro
 			return err
 		}
 
-		row := Row{Tabla: table, VetterID: id, Hash: hash, Deleted: raw.Deleted, Data: raw.Values}
+		row := Row{Tabla: table, VetterID: id, RowKey: id, Hash: hash, Deleted: raw.Deleted, Data: raw.Values}
 
-		if at, dup := seen[id]; dup {
+		if len(positions[id]) > 0 {
 			report.Duplicates++
-
-			if !row.Deleted || rows[at].Deleted {
-				rows[at] = row
-			}
-
-			return nil
 		}
 
-		seen[id] = len(rows)
+		positions[id] = append(positions[id], len(rows))
 		rows = append(rows, row)
 
 		return nil
@@ -257,19 +276,31 @@ func collect(path, table, key string, snap *Snapshot, report *TableReport) ([]Ro
 		return nil, fmt.Errorf("leer %s: %w", table, err)
 	}
 
+	for id, at := range positions {
+		if len(at) > 1 {
+			assignRowKeys(rows, id, at)
+		}
+	}
+
 	pending := rows[:0]
 
 	for _, row := range rows {
-		if snap.Rows[rowKey(table, row.VetterID)] != row.Hash {
+		if snap.Rows[rowKey(table, row.RowKey)] != row.Hash {
 			pending = append(pending, row)
 		}
 	}
 
 	prefix := table + "|"
 
+	present := make(map[string]bool, len(rows))
+
+	for _, row := range rows {
+		present[row.RowKey] = true
+	}
+
 	for stored := range snap.Rows {
 		if id, ok := strings.CutPrefix(stored, prefix); ok {
-			if _, present := seen[id]; !present {
+			if !present[id] {
 				report.Missing++
 			}
 		}
@@ -355,7 +386,7 @@ func (r *Runner) sendSplitting(ctx context.Context, snap *Snapshot, batch []Row)
 	switch {
 	case err == nil:
 		for _, row := range batch {
-			snap.Rows[rowKey(row.Tabla, row.VetterID)] = row.Hash
+			snap.Rows[rowKey(row.Tabla, row.RowKey)] = row.Hash
 		}
 
 		r.Logger.Info("lote enviado", "tabla", batch[0].Tabla, "filas", len(batch),

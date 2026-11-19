@@ -32,6 +32,7 @@ var (
 // Row es una fila del lote tal como la define el contrato.
 type Row struct {
 	Tabla    string         `json:"tabla"`
+	RowKey   string         `json:"row_key,omitempty"`
 	VetterID string         `json:"vetter_id"`
 	Hash     string         `json:"hash"`
 	Deleted  bool           `json:"deleted"`

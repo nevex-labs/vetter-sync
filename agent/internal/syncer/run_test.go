@@ -158,6 +158,10 @@ func TestRunTwiceSecondSendsNothing(t *testing.T) {
 		t.Errorf("el borrado tiene que viajar con deleted=true y vetter_id de keys: %+v", deleted)
 	}
 
+	if deleted.RowKey != "1525" {
+		t.Errorf("row_key = %q, quería el vetter_id", deleted.RowKey)
+	}
+
 	if _, ok := byID["VISITAS|77"]; !ok {
 		t.Errorf("visitas.dbf en minúscula no se encontró: %v", byID)
 	}
@@ -410,12 +414,21 @@ func TestCollectDeletedDuplicateKeepsLive(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if len(rows) != 1 || rows[0].Deleted {
-		t.Errorf("filas = %+v, quería la viva", rows)
+	if len(rows) != 2 {
+		t.Fatalf("filas = %d, quería las dos", len(rows))
+	}
+
+	// La viva se queda la clave base: es la que se proyecta.
+	if rows[0].Deleted || rows[0].RowKey != "1524/2" {
+		t.Errorf("primera fila = %+v", rows[0])
+	}
+
+	if !rows[1].Deleted || rows[1].RowKey != "1524/2#2" {
+		t.Errorf("segunda fila = %+v", rows[1])
 	}
 }
 
-func TestCollectDuplicatesLastWins(t *testing.T) {
+func TestCollectDuplicatesKeepBoth(t *testing.T) {
 	t.Parallel()
 
 	dir := t.TempDir()
@@ -435,8 +448,12 @@ func TestCollectDuplicatesLastWins(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if len(rows) != 2 || rows[0].Data["VACUNA"] != "nueva" {
-		t.Errorf("filas = %+v", rows)
+	if len(rows) != 3 {
+		t.Fatalf("filas = %d, quería 3", len(rows))
+	}
+
+	if rows[0].RowKey != "1" || rows[1].RowKey != "1#2" || rows[2].RowKey != "2" {
+		t.Errorf("claves = %q, %q, %q", rows[0].RowKey, rows[1].RowKey, rows[2].RowKey)
 	}
 
 	if report.Duplicates != 1 || report.Missing != 1 {
