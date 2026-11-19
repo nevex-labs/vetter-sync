@@ -102,6 +102,18 @@ versión mayor, la baja, verifica la firma y el sha256, y deja el binario nuevo
 para la corrida siguiente. **No hay que tocar la PC.** Si la versión nueva falla
 tres corridas seguidas, vuelve sola a la anterior (`vetter-agent.exe.old`).
 
+La tarea usa `vetter-agent-task.exe` (sin consola); el agente baja el binario que
+corresponde al que está corriendo, así que la ventana no aparece.
+
+**Una vez sola**, para pasar de 0.1.1 (que no tiene auto-update) a la última:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File C:\ProgramData\vetter-agent\instalar-actualizacion.ps1
+```
+
+Baja los dos binarios, verifica el sha256, para la tarea, reemplaza y la arranca.
+No toca `config.json`, `secret.bin` ni el snapshot: no hay que volver a parear.
+
 ## Verificar
 
 ```powershell

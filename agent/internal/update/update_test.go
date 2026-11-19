@@ -107,7 +107,7 @@ func TestDownloadVerificaSHA(t *testing.T) {
 
 	ok := Release{URL: server.URL, SHA256: hex.EncodeToString(sum[:])}
 
-	if err := Download(context.Background(), server.Client(), ok, dest); err != nil {
+	if err := Download(context.Background(), server.Client(), ok, "vetter-agent.exe", dest); err != nil {
 		t.Fatalf("Download: %v", err)
 	}
 
@@ -117,7 +117,7 @@ func TestDownloadVerificaSHA(t *testing.T) {
 
 	bad := Release{URL: server.URL, SHA256: "00" + hex.EncodeToString(sum[:])[2:]}
 
-	if err := Download(context.Background(), server.Client(), bad, dest); err == nil {
+	if err := Download(context.Background(), server.Client(), bad, "vetter-agent.exe", dest); err == nil {
 		t.Fatal("un sha256 distinto pasó")
 	}
 
@@ -164,6 +164,32 @@ func assertContent(t *testing.T, path, want string) {
 
 	if string(got) != want {
 		t.Errorf("%s = %q, quería %q", path, got, want)
+	}
+}
+
+func TestAssetEligeElBinarioDeLaTarea(t *testing.T) {
+	t.Parallel()
+
+	release := Release{
+		URL:        "https://x/vetter-agent.exe",
+		SHA256:     "consola",
+		TaskURL:    "https://x/vetter-agent-task.exe",
+		TaskSHA256: "tarea",
+	}
+
+	if url, sha := release.Asset(`C:\ProgramData\vetter-agent\vetter-agent-task.exe`); url != release.TaskURL || sha != "tarea" {
+		t.Errorf("tarea: %q %q", url, sha)
+	}
+
+	if url, sha := release.Asset(`C:\ProgramData\vetter-agent\vetter-agent.exe`); url != release.URL || sha != "consola" {
+		t.Errorf("consola: %q %q", url, sha)
+	}
+
+	// Un release viejo sin task_url no rompe: baja el de consola.
+	viejo := Release{URL: release.URL, SHA256: "consola"}
+
+	if url := viejo.Asset("vetter-agent-task.exe"); url != viejo.URL {
+		t.Errorf("sin task_url: %q", url)
 	}
 }
 

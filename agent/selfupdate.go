@@ -85,7 +85,7 @@ func selfUpdate(ctx context.Context, dir string, logger *slog.Logger) {
 		return
 	}
 
-	if err := update.Download(ctx, client, release, exe+".new"); err != nil {
+	if err := update.Download(ctx, client, release, exe, exe+".new"); err != nil {
 		logger.Warn("update: no se pudo bajar la versión", "err", err)
 
 		return

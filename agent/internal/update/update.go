@@ -45,8 +45,20 @@ type Release struct {
 	Version     string `json:"version"`
 	URL         string `json:"url"`
 	SHA256      string `json:"sha256"`
+	TaskURL     string `json:"task_url"`
+	TaskSHA256  string `json:"task_sha256"`
 	PublishedAt string `json:"published_at"`
 	MinContract int    `json:"min_contract"`
+}
+
+// Asset elige el binario que corresponde al que está corriendo: la tarea usa el
+// build sin consola, que es otro archivo con otro hash.
+func (r Release) Asset(executable string) (url, sha string) {
+	if strings.HasSuffix(strings.ToLower(executable), "-task.exe") && r.TaskURL != "" {
+		return r.TaskURL, r.TaskSHA256
+	}
+
+	return r.URL, r.SHA256
 }
 
 // Decode valida la firma y devuelve el manifiesto. Sin una clave de 32 bytes
@@ -157,7 +169,9 @@ func get(ctx context.Context, client *http.Client, url string, limit int64) ([]b
 // Download baja el binario a `dest` y verifica el sha256 del manifiesto antes
 // de dejarlo: si no coincide, borra el archivo. Se hashea al vuelo, sin tener
 // el ejecutable entero en memoria.
-func Download(ctx context.Context, client *http.Client, release Release, dest string) error {
+func Download(ctx context.Context, client *http.Client, release Release, executable, dest string) error {
+	url, want := release.Asset(executable)
+
 	// El binario tiene que poder ejecutarse: en Windows el modo no importa, en
 	// el resto sí.
 	file, err := os.OpenFile(dest, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o750) //nolint:gosec
@@ -167,7 +181,7 @@ func Download(ctx context.Context, client *http.Client, release Release, dest st
 
 	sum := sha256.New()
 
-	written, err := download(ctx, client, release.URL, io.MultiWriter(file, sum))
+	written, err := download(ctx, client, url, io.MultiWriter(file, sum))
 	closeErr := file.Close()
 
 	if err == nil {
@@ -186,7 +200,7 @@ func Download(ctx context.Context, client *http.Client, release Release, dest st
 		return errors.New("el ejecutable vino vacío o demasiado grande")
 	}
 
-	if hex.EncodeToString(sum.Sum(nil)) != strings.ToLower(release.SHA256) {
+	if hex.EncodeToString(sum.Sum(nil)) != strings.ToLower(want) {
 		_ = os.Remove(dest)
 
 		return errors.New("el sha256 no coincide")

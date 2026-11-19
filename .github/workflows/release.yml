@@ -38,14 +38,24 @@ jobs:
             -ldflags "-s -w -X main.version=${GITHUB_REF_NAME#v} -X main.updatePublicKey=${{ vars.UPDATE_PUBLIC_KEY }}" \
             -o ../vetter-agent.exe .
 
+          # La tarea programada usa el mismo código sin consola: con consola, cada
+          # corrida abre y cierra una ventana.
+          GOOS=windows GOARCH=amd64 go build -trimpath \
+            -ldflags "-s -w -H=windowsgui -X main.version=${GITHUB_REF_NAME#v} -X main.updatePublicKey=${{ vars.UPDATE_PUBLIC_KEY }}" \
+            -o ../vetter-agent-task.exe .
+
       - name: Manifest
         shell: bash
         run: |
           SHA=$(sha256sum ../vetter-agent.exe | cut -d' ' -f1)
+          TASK_SHA=$(sha256sum ../vetter-agent-task.exe | cut -d' ' -f1)
           VERSION="${GITHUB_REF_NAME#v}"
           URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}/vetter-agent.exe"
-          jq -n --arg v "$VERSION" --arg u "$URL" --arg s "$SHA" --arg d "$(date -u +%FT%TZ)" \
-            '{version:$v,url:$u,sha256:$s,published_at:$d,min_contract:3}' > ../manifest.json
+          TASK_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}/vetter-agent-task.exe"
+          jq -n --arg v "$VERSION" --arg u "$URL" --arg s "$SHA" \
+            --arg tu "$TASK_URL" --arg ts "$TASK_SHA" --arg d "$(date -u +%FT%TZ)" \
+            '{version:$v,url:$u,sha256:$s,task_url:$tu,task_sha256:$ts,published_at:$d,min_contract:3}' \
+            > ../manifest.json
           cat ../manifest.json
 
       - name: Firmar manifiesto
@@ -72,6 +82,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create "$GITHUB_REF_NAME" \
-            ../vetter-agent.exe ../manifest.json ../manifest.sig \
+            ../vetter-agent.exe ../vetter-agent-task.exe ../manifest.json ../manifest.sig \
             --title "vetter-agent ${GITHUB_REF_NAME#v}" \
             --notes "Release ${GITHUB_REF_NAME}. El agente lo toma en la próxima corrida."
