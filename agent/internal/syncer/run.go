@@ -213,16 +213,15 @@ func (r *Runner) prepare(table string, snap *Snapshot) (TableReport, []Row, *Fil
 // collect lee la copia y arma las filas. Un `vetter_id` repetido no se colapsa:
 // viaja con `row_key` = `id#2`, `id#3`… y la fila viva se queda la clave base,
 // para que el dominio proyecte la viva y la repetida quede guardada.
-// assignRowKeys deja la viva (o la primera, si no hay ninguna) con la clave base
-// y numera las demás con `#n`.
+// assignRowKeys deja la última viva con la clave base (lo mismo que mandaba la
+// 0.1.1) y numera las demás con `#n`. Así la primera corrida de esta versión no
+// cambia el contenido de la clave base y no reproyecta nada.
 func assignRowKeys(rows []Row, id string, at []int) {
-	base := at[0]
+	base := at[len(at)-1]
 
 	for _, i := range at {
 		if !rows[i].Deleted {
 			base = i
-
-			break
 		}
 	}
 

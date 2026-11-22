@@ -428,6 +428,39 @@ func TestCollectDeletedDuplicateKeepsLive(t *testing.T) {
 	}
 }
 
+// Dos vivas con el mismo id: la clave base se queda con la última, igual que la
+// 0.1.1, para que la primera corrida de 0.2.x no cambie el contenido de la base.
+func TestCollectLiveDuplicateKeepsLastInBase(t *testing.T) {
+	t.Parallel()
+
+	path := dbftest.Write(t, t.TempDir(), "PACIENTES.DBF", 0x03,
+		[]dbftest.Field{{Name: "CODIGOPACI", Type: 'C', Length: 9}, {Name: "NOMBRE", Type: 'C', Length: 8}},
+		[]dbftest.Record{
+			{Values: []string{"1524/2", "primera"}},
+			{Values: []string{"1524/2", "segunda"}},
+		})
+
+	snap := Snapshot{Rows: map[string]string{}, Files: map[string]FileStamp{}}
+	report := TableReport{}
+
+	rows, err := collect(path, "PACIENTES", "CODIGOPACI", &snap, &report)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(rows) != 2 {
+		t.Fatalf("filas = %d", len(rows))
+	}
+
+	if rows[1].RowKey != "1524/2" || rows[1].Data["NOMBRE"] != "segunda" {
+		t.Errorf("la base tiene que ser la última viva: %+v", rows[1])
+	}
+
+	if rows[0].RowKey != "1524/2#2" || rows[0].Data["NOMBRE"] != "primera" {
+		t.Errorf("la repetida = %+v", rows[0])
+	}
+}
+
 func TestCollectDuplicatesKeepBoth(t *testing.T) {
 	t.Parallel()
 
@@ -452,8 +485,13 @@ func TestCollectDuplicatesKeepBoth(t *testing.T) {
 		t.Fatalf("filas = %d, quería 3", len(rows))
 	}
 
-	if rows[0].RowKey != "1" || rows[1].RowKey != "1#2" || rows[2].RowKey != "2" {
+	if rows[0].RowKey != "1#2" || rows[1].RowKey != "1" || rows[2].RowKey != "2" {
 		t.Errorf("claves = %q, %q, %q", rows[0].RowKey, rows[1].RowKey, rows[2].RowKey)
+	}
+
+	// La base es la última viva: es la que ya estaba en D1 con la 0.1.1.
+	if rows[1].Data["VACUNA"] != "nueva" {
+		t.Errorf("la base = %+v", rows[1])
 	}
 
 	if report.Duplicates != 1 || report.Missing != 1 {
