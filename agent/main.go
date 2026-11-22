@@ -49,6 +49,8 @@ func main() {
 		fmt.Printf("vetter-agent %s\n", version)
 	case "pair":
 		os.Exit(pair(os.Args[2:]))
+	case "setup":
+		os.Exit(setupCommand(os.Args[2:]))
 	case "sync":
 		os.Exit(syncCommand(os.Args[2:]))
 	default:
@@ -62,6 +64,7 @@ func usage() {
 
   inspect --dir <ruta> [--out inspector.json] [--stat TABLA.CAMPO ...]
   pair    [--config <config.json>] [--gui | --clipboard]
+  setup   [--config <config.json>]      (ventana de instalación, Windows)
   sync    --config <config.json> [--dry-run]
   version`)
 }

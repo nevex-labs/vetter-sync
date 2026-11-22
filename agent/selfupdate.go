@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"os"
@@ -57,17 +58,9 @@ func selfUpdate(ctx context.Context, dir string, logger *slog.Logger) {
 	}
 
 	client := &http.Client{Timeout: 30 * time.Second}
-
-	manifest, signature, err := update.Fetch(ctx, client)
+	release, err := latestRelease(ctx, client)
 	if err != nil {
-		logger.Warn("update: no se pudo consultar el release", "err", err)
-
-		return
-	}
-
-	release, err := update.Decode(manifest, signature, updatePublicKey)
-	if err != nil {
-		logger.Warn("update: manifiesto rechazado", "err", err)
+		logger.Warn("update: no se pudo leer el release", "err", err)
 
 		return
 	}
@@ -99,6 +92,21 @@ func selfUpdate(ctx context.Context, dir string, logger *slog.Logger) {
 
 	_ = update.MarkChecked(checkedPath, time.Now())
 	logger.Info("update: instalada, la próxima corrida la usa", "version", release.Version)
+}
+
+// latestRelease baja y valida el manifiesto del último release.
+func latestRelease(ctx context.Context, client *http.Client) (update.Release, error) {
+	manifest, signature, err := update.Fetch(ctx, client)
+	if err != nil {
+		return update.Release{}, fmt.Errorf("consultar el release: %w", err)
+	}
+
+	release, err := update.Decode(manifest, signature, updatePublicKey)
+	if err != nil {
+		return update.Release{}, fmt.Errorf("manifiesto rechazado: %w", err)
+	}
+
+	return release, nil
 }
 
 func readCounter(path string) int {

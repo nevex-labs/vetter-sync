@@ -95,6 +95,26 @@ ver el resultado.
 - `Get-ScheduledTaskInfo -TaskName "Vetter Sync"` muestra el último código de
   salida.
 
+## Instalación con la ventana (sin PowerShell)
+
+`vetter-setup.exe` es el mismo binario sin consola, con tres botones:
+
+1. **Pegar** lee el secreto del portapapeles (y lo vacía), le saca espacios,
+   saltos de línea, comillas, BOM y caracteres de ancho cero, y lo deja en el
+   campo. Es lo que rompe un pegado de RDP o de Word.
+2. **Guardar pareo** valida el formato, hace un POST vacío al Worker y, si
+   responde 200, lo cifra con DPAPI. Un 401 no guarda nada.
+3. **Actualizar agente** baja del release firmado los dos binarios
+   (`vetter-agent.exe` y `vetter-agent-task.exe`), verifica el sha256 y los
+   deja en su lugar. La corrida siguiente ya usa la versión nueva.
+4. **Instalar tarea** escribe `instalar-tarea.ps1` (va dentro del `.exe`) y lo
+   abre. La cuenta y la contraseña de Windows las pide el diálogo del sistema:
+   no pasan por este binario ni por una línea de comandos.
+
+Arriba muestra la versión, la ruta del config y si el secreto está guardado.
+
+Descarga: `https://github.com/nevex-labs/vetter-sync/releases/latest/download/vetter-setup.exe`
+
 ## Auto-update
 
 Cada 24 h, antes del sync, el agente consulta el release firmado. Si hay una

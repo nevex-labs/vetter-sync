@@ -37,10 +37,24 @@ func Candidates() []string {
 	return out
 }
 
-// Clean quita lo que agregan consolas y pipes: espacios, fin de línea y el BOM
-// que mete PowerShell 5.1 al pasar texto por un pipe.
+// Clean deja solo el secreto: saca lo que agregan consolas, pipes y el
+// portapapeles (espacios, saltos de línea, comillas, BOM, ancho cero). Un pegado
+// de RDP o de Word trae de todo; el secreto no tiene ninguno de esos caracteres.
 func Clean(line string) string {
-	return strings.TrimSpace(strings.TrimPrefix(strings.TrimSpace(line), string(rune(0xFEFF))))
+	var out strings.Builder
+
+	for _, r := range line {
+		switch r {
+		case ' ', '\t', '\r', '\n', '\u00A0', '\u200B', '\u200C', '\u200D', '\uFEFF':
+			continue
+		case '"', '\'', '`':
+			continue
+		default:
+			out.WriteRune(r)
+		}
+	}
+
+	return out.String()
 }
 
 // ReadMasked lee hasta Enter y escribe un * por carácter recibido, incluido

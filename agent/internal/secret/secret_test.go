@@ -76,6 +76,10 @@ func TestClean(t *testing.T) {
 		{in: "vgs_a\r\n", want: "vgs_a"},
 		{in: string(rune(0xFEFF)) + "vgs_a\n", want: "vgs_a"},
 		{in: "  vgs_a  ", want: "vgs_a"},
+		{in: "\"vgs_a\"", want: "vgs_a"},
+		{in: "vgs_a\r\nvgs_a", want: "vgs_avgs_a"},
+		{in: "vgs_\u200Ba", want: "vgs_a"},
+		{in: "'vgs_a'\n", want: "vgs_a"},
 	}
 
 	for _, tt := range tests {
