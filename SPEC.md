@@ -1,5 +1,9 @@
 # Spec: Agente Vetter read-only + ingesta Worker
 
+> **Estado**: diseñado el 2026-10-15, implementado y en producción desde el
+> 2026-11-22. Este documento es el diseño original; lo que corre hoy está en
+> `docs/agent-implementation.md` y el runbook de la PC.
+
 ## 1. Objetivo
 
 Traer los datos que hoy solo están en Vetter 5 a nuestro sistema, sin pagar el módulo de Vetter y sin dejar de usar Vetter.
@@ -22,7 +26,7 @@ Z:\vetter5\Datos (prod)              Worker veterinariagachens
   │ copia RO → %TEMP%                  │
   ▼                                    ▼
 vetter-agent.exe (Go, tarea) ──HTTPS POST──► POST /api/sync/vetter
-  snapshot.db local                      │ valida credencial, upsert D1, sube R2
+  snapshot.json local                      │ valida credencial, upsert D1, sube R2
                                          ▼
                                     D1 + R2 (bot/panel leen de acá)
 ```
@@ -57,7 +61,7 @@ Reporte dice: ningún campo guarda fecha de modificación. Estrategia combinada:
 1. `VISITAS` como bitácora (qué paciente se tocó, cuándo). No se importa; la detección usa `mtime` y hash.
 2. IDs autoincrementales (lo nuevo).
 3. `mtime` de DBF/FPT para decidir si vale copiar.
-4. Hash por fila vs `snapshot.db` local (SQLite del agente) para ediciones sin fecha.
+4. Hash por fila vs `snapshot.json` local (una entrada por tabla y `row_key`) para ediciones sin fecha.
 
 Limitación: ediciones sin cambio de fecha solo se ven por hash. Borrados lógicos (`deleted flag`) a confirmar en copia.
 

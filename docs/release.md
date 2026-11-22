@@ -24,8 +24,8 @@ git push origin v0.2.0
 ```
 
 El workflow `.github/workflows/release.yml` hace: tests, `go vet`, build de
-Windows con la versión del tag, `sha256`, manifiesto, firma, verificación y
-`gh release create` con `vetter-agent.exe`, `manifest.json` y `manifest.sig`.
+Windows con la versión del tag (los dos binarios y `vetter-setup.exe`),
+`sha256`, manifiesto, firma, verificación y `gh release create`.
 
 ## Verificar
 

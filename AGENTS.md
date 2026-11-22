@@ -39,7 +39,7 @@ agent/                  binario Go (tarea programada de Windows)
 docs/contract.md        GENERADO desde veterinaria-gachen. No editar.
 docs/vetter-schema.md   DBF: qué está confirmado y qué sigue siendo hipótesis
 docs/pc-runbook.md      instalar, operar y diagnosticar en la PC
-docs/open-questions.md  lo que falta cerrar en la visita
+docs/open-questions.md  lo que sigue abierto, con fecha y evidencia
 SPEC.md                 el diseño y sus fases
 ```
 
@@ -114,5 +114,5 @@ El detalle está en `docs/quality.md`.
 ## Evidencia
 
 Cada afirmación sobre Vetter se prueba contra la copia o queda como pregunta en
-`docs/open-questions.md`. El schema del 15/10 es hipótesis hasta la primera
-visita.
+`docs/open-questions.md`. Lo confirmado está en `docs/vetter-schema.md` con
+fecha; lo del 15/10 que no se midió sigue siendo hipótesis.

@@ -1,7 +1,9 @@
 # PC de la clínica — instalar y operar el agente
 
-> Estado: instalado y sincronizando desde el 2026-11-18 (agente 0.1.1). El
-> auto-update ya está en el binario: los releases nuevos llegan solos.
+> Estado: instalado y sincronizando desde el 2026-11-18. La versión que corre
+> se ve con `vetter-agent.exe version`; si está atrasada, se actualiza desde la
+> ventana o con `instalar-actualizacion.ps1`. El auto-update baja los releases
+> firmados solo, cada 24 h.
 
 ## Antes de tocar la PC
 
@@ -197,6 +199,6 @@ recibido y el agente no escribe en Vetter.
 ## Nunca
 
 - Abrir los DBF con una herramienta que escriba, ni hacer `PACK`.
-- Poner el `.exe`, el secreto o el `snapshot.db` en OneDrive o en el Escritorio.
-- Correr dos instancias a la vez sobre el mismo `snapshot.db`.
+- Poner el `.exe`, el secreto o el `snapshot.json` en OneDrive o en el Escritorio.
+- Correr dos instancias a la vez sobre el mismo `snapshot.json`.
 - Leer la réplica de `OneDrive\BKP Vetter5`.

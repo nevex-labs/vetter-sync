@@ -1,85 +1,99 @@
-# Vetter 5 — lo que sabemos del DBF
+# Vetter 5 — el DBF, confirmado
 
-Todo lo de acá es **hipótesis** hasta confirmarlo contra la copia de `Z:`. La
-fuente original es el diagnóstico del 2026-10-15 en
-`veterinaria-gachen/docs/product/vetter-hallazgos-2026-10-15.md`, que tampoco se
-corrió en local. Cada fila que se confirme se marca acá con fecha y evidencia.
+Medido contra la copia del UNC el 2026-11-18 con `inspect` (`vetter-agent 0.1.1`)
+y con el primer volcado completo. La evidencia está en
+`docs/informe-visita.md` y `docs/evidencia/vetter-inspector-2026-11-18.json`.
 
 ## Estructura
 
-- Vetter 5.11.0, Visual FoxPro 7. Tablas `.DBF` + memo `.FPT`.
-- Producción en `\\Srvarchvete01\c\vetter5` (unidad `Z:`), no en la PC.
+- Vetter 5.11.0, Visual FoxPro 7. DBF sin memos en la lista blanca: no hay `.FPT`,
+  así que copiar cada archivo alcanza.
+- Producción en `\\Srvarchvete01\c\vetter5` (unidad `Z:`), no en la PC. El
+  Vetter de la PC escribe en OneDrive: ver `open-questions.md` #1.
 - Sin fecha de modificación por fila. La detección de cambios es por hash.
-- Encoding: **CP1252** (`0x03`) en los 75 DBF, confirmado el 2026-11-18 con
-  `inspect`. **La decodificación a UTF-8 pasa antes del hash.**
-- Borrado lógico: **marca el primer byte con `0x2A`, no compacta**
-  (2026-11-18). Igual hay que vigilar `PACK`: si alguna vez corre, la fila
-  desaparece y el sync no se entera; el agente loguea `desaparecidas` por
-  corrida. Ver `open-questions.md`.
+- Encoding: **CP1252** (`0x03`) en los 75 DBF. La decodificación a UTF-8 pasa
+  **antes** del hash.
+- Borrado lógico: marca el primer byte con `0x2A`, no compacta. `visitas.dbf`
+  tiene 0 borrados en 38.716.
 
 ## Tablas de la lista blanca
 
-### `CLIENTES`
+Los tipos son los del header: `C` carácter, `N` numérico, `D` fecha, `L` lógico,
+`T` fecha y hora. Las claves de sync están en `config.keys`.
 
-| Campo (hipótesis) | Tipo | Uso | Confirmado |
-|---|---|---|---|
-| `CODIGO` | texto | `vetter_id` del tutor | no |
-| `NOMBRE` | texto | nombre del tutor | no |
-| `TELEFONO` | texto 40c libre | `tutor_phones` | no |
+### `CLIENTES` — 3.573 registros, 37 borrados
 
-`TELEFONO` es texto libre y puede traer varios números. El import lo normaliza
-con `normalizePhone` y `toWhatsAppPhone` (formato Meta: `549` + área + número).
-Los inválidos se cuentan y se descartan.
-
-### `PACIENTES`
-
-| Campo (hipótesis) | Tipo | Uso | Confirmado |
-|---|---|---|---|
-| `CODIGOPACI` | texto, ej. `1524/2` | `pets.vetter_id` | sí (2026-11-18) |
-| `NOMBRE` | texto | `pets.name` | no |
-| `ESPECIE` | texto | `pets.species` | no |
-| `RAZA` | texto | `pets.breed` | no |
-| `SEXO` | texto | pendiente de schema | no |
-
-`CODIGOPACI` es `código de cliente / número de paciente`: el prefijo coincide
-con `PACIENTES.CODIGO` y existe en `CLIENTES.CODIGO` en 5.114/5.114
-(confirmado el 2026-11-18).
-
-### `VACUNAS`
-
-| Campo (hipótesis) | Uso | Confirmado |
+| Campo | Tipo | Uso |
 |---|---|---|
-| `FECHA_REVA` | próxima dosis → `preventives.next_dose` | no |
-| tipo / producto | `preventives.type` y `.product` | no |
-| `AVISADO` | no se usa | no |
+| `CODIGO` | N(6) | `tutors.vetter_id`, clave de sync |
+| `NOMBRE` | C(40) | `tutors.first_name` (apellido primero, ver ADR 0020) |
+| `TELEFONO` | C(40) libre | `tutor_phones`; puede traer varios números |
+| `EMAIL`, `DIRECCION`, `LOCALIDAD` | C | no se proyectan |
+| `ANULADO` | L | 0 en las 3.573; la proyección lo parkea si viene en 1 |
+| `SALDO`, `FOTO`, `DATOS_FAC` | — | fuera de alcance |
 
-`preventives.type` solo admite `vacuna` o `antiparasitario`. Si `VACUNAS` mezcla
-otras cosas, hay que decidir cómo se agrupan antes de proyectar.
+`TELEFONO` se separa y normaliza a formato Meta (`549` + área + número). Los
+inválidos se cuentan y se descartan; los compartidos no se asignan a nadie.
 
-### `VISITAS`
+### `PACIENTES` — 5.160 registros, 46 borrados
 
-| Campo (hipótesis) | Uso | Confirmado |
+| Campo | Tipo | Uso |
 |---|---|---|
-| fecha / hora | `visits.fecha` y `.hora` | no |
-| texto de la atención | `visit_notes.text` (no se proyecta: ADR 0020) | no |
-| profesional | `visits.doctor_id` (3 códigos) | no |
+| `CODIGOPACI` | C(9), ej. `1524/2` | `pets.vetter_id`, clave de sync |
+| `CODIGO` | N(6) | cliente; el prefijo de `CODIGOPACI` da lo mismo en 5.114/5.114 |
+| `NOMBRE` | C | `pets.name` |
+| `ESPECIE`, `RAZA` | C | `pets.species`, `pets.breed` |
+| `SEXO` | C | `pets.sex` + `pets.neutered` (6 valores, ver ADR 0020 §5) |
+| `FECHA_NAC` | D | `pets.birth_date`, validada 1980..hoy |
+| `VIVE` | L | `pets.alive`: 1 vivo, 0 no vivo |
+| `ANULADO`, `EXTRAV` | L | 0 y 2 filas respectivamente; sin semántica confirmada |
+| `MICROCHIP`, `PELAJE`, `FOTO` | — | no se proyectan |
 
-Es la única tabla con timestamp por evento. Es una bitácora de eventos, no una lista de atenciones: no se proyecta (ADR 0020). La historia clínica real está en `CLINICA`.
+3 `CODIGOPACI` repetidos: viajan los dos con `row_key` y la repetida queda
+`ambiguo`.
 
-### `ADJUNTOS`
+### `VACUNAS` — 3.856 registros, 101 borrados
 
-| Campo (hipótesis) | Uso | Confirmado |
+| Campo | Tipo | Uso |
 |---|---|---|
-| ruta / nombre del archivo | R2 `vetter/<tabla>/<vetter_id>/<nombre>` | no |
-| vínculo al paciente o la visita | `attachments.pet_id` / `visit_id` | no |
-| tipo | `kind`: estudios, radiografías, imágenes | no |
+| `ID_VACUNA` | N(10) | `preventives.vetter_id`, clave de sync |
+| `CODIGOPACI` | C(9) | paciente |
+| `VACUNA` | C(80) | `preventives.product` |
+| `ES_VACUNA` | L | `preventives.type`: `T` vacuna, `F` antiparasitario |
+| `FECHA_APLI` | D | `preventives.date`; 15 sin fecha válida |
+| `FECHA_REVA` | D | `preventives.next_dose`, si cae entre hoy y +3 años |
+| `CANCELADA` | L | `preventives.cancelled_at` |
+| `AVISADO`, `FECHA_AVIS` | L, D | `preventives.reminder_sent_at`; hoy en 0 |
 
-Volumen del reporte: ~1.300 PDF, ~1.789 JPG y un ZIP de 458 MB. El ZIP no se
-sube. Los archivos van después del backup de R2 y con `FILES_PER_RUN` bajo.
+Vivas: 3.381 vacunas y 375 antiparasitarios. `CANCELADA` está en `F` en todas.
+
+### `visitas` — 38.716 registros, 0 borrados
+
+| Campo | Tipo | Uso |
+|---|---|---|
+| `FECHA` | T | fecha y hora del evento |
+| `CODIGO` | N(10) | **código de cliente** (3.589 valores distintos) |
+| `CODIGOPACI` | C(9) | paciente; vacío en 3.589 eventos (`NUEVO CLIENTE`) |
+| `DETALLE` | C(254) | tipo de evento o nota |
+
+No hay campo de profesional. Es una bitácora de eventos, no una lista de
+atenciones: **no se proyecta** (ADR 0020). Clave de sync `CODIGO+FECHA`; 3
+colisiones.
+
+### `ADJUNTOS` — 3.209 registros, 94 borrados
+
+| Campo | Tipo | Uso |
+|---|---|---|
+| `ID_ADJ` | N(10) | clave de sync |
+| `CODIGOPACI` | C(9) | **paciente**, no visita (3.115/3.115 existen) |
+| `FECHA`, `TITULO` | D, C | metadata |
+| `ARCHIVO` | C | ruta relativa con `\` |
+
+Los archivos no se suben todavía: la metadata sola no se proyecta.
 
 ## Lo que el agente manda
 
-Las filas crudas de estas tablas, con el nombre de campo tal como viene del DBF
-en `data`, más `tabla`, `vetter_id`, `hash` y `deleted`. No manda el mapeo.
+Las filas crudas con el nombre de campo del DBF en `data`, más `tabla`,
+`vetter_id`, `row_key`, `hash` y `deleted`. No manda el mapeo.
 
 El contrato exacto está en `contract.md`, que se genera desde el Worker.

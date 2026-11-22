@@ -51,13 +51,11 @@ Contestadas contra la copia del UNC con `vetter-agent 0.1.1` (`inspect` +
 2. **Cuenta de servicio** para que la tarea corra sin sesión iniciada. Hoy
    depende de que `usuario` haya iniciado sesión; si la PC reinicia y nadie
    entra, no sincroniza.
-3. **Colisiones de `PACIENTES`.** Tres pares comparten `CODIGOPACI`. El Worker
-   corta los repetidos de un mismo lote y **se queda con la última fila**
-   (`src/app/vetter/sync.ts`, `byKey`), no con la viva: el informe dice que el
-   agente manda la viva, pero esa regla no está en el código que corre. Los
-   conteos son compatibles con haber perdido **hasta un paciente vivo** (la
-   lectura más probable: 1 vivo y 2 borrados). Recuperarlo pide `row_key`:
-   contrato nuevo y otro binario en la PC.
+3. **Colisiones de `PACIENTES` — resuelto con `row_key`.** Tres pares comparten
+   `CODIGOPACI`. Desde el agente 0.2.2 las dos filas viajan (`id` y `id#2`) y el
+   Worker las guarda a las dos; la repetida queda `ambiguo` con
+   `reason = 'duplicado'`. Los 3 que se perdieron en el primer volcado vuelven
+   solos en la primera corrida con 0.3.0.
 4. **Pacientes que la bitácora nombra y no existen.** 306 eventos de `VISITAS`
    sobre 56 códigos de paciente que no están en `PACIENTES` (ni vivos ni
    borrados); 40 de esos clientes sí existen y 20 tienen otros pacientes con la
@@ -66,4 +64,5 @@ Contestadas contra la copia del UNC con `vetter-agent 0.1.1` (`inspect` +
 5. **¿Vetter compacta `visitas`?** 0 borrados en 38.716. El agente loguea
    `desaparecidas` por tabla en cada corrida: dos corridas alcanzan.
 6. **`visitas.FECHA` viaja como `T`** (`AAAA-MM-DDTHH:MM:SS`, hora local sin
-   zona), y el contrato v1 solo define `D`. Conviene escribirlo en el contrato.
+   zona). El contrato ya lo documenta; falta que el Worker lo use si algún día
+   se proyectan las visitas.

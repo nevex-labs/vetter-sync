@@ -1,81 +1,97 @@
-# Claude Code en la PC — primera y única visita
+# Operar la PC de la clínica
 
-Objetivo: **sacar el schema real de Vetter y dejar la PC lista para operar
-desde acá para siempre.** No se instala el agente todavía: `pair` y `sync` no
-existen en este binario. Lo que sigue después se hace en esta misma máquina.
+El agente está instalado y sincronizando. Esta página es para cuando hay que
+actualizarlo, dejarlo corriendo sin sesión o revisar por qué no manda.
 
-## Antes de tocar nada
+Todo se hace en la PC, con el repo clonado o sin él. La fuente es siempre el
+UNC `\\Srvarchvete01\c\vetter5\Datos`; nunca la réplica de OneDrive.
 
-1. `git log --oneline -1` y `.\vetter-agent.exe version` → `vetter-agent 0.1.1`.
-   Si el exe no está, `git pull`; si hay que rebuildear:
-   `cd agent; GOOS=windows GOARCH=amd64 go build -o ../vetter-agent.exe .`
-2. **Conectividad**:
-   ```powershell
-   curl.exe -s https://veterinariagachens.nevexlabs.workers.dev/api/sync/vetter
-   # {"ok":true,"contract":2}
-   ```
-   Timeout o error de red = firewall/proxy. Reportalo y **no sigas** con el
-   sync: primero hay que resolver la salida.
-3. **Acceso al share**:
-   ```powershell
-   Test-Path "\\Srvarchvete01\c\vetter5\Datos"
-   Get-ChildItem "\\Srvarchvete01\c\vetter5\Datos" -Filter *.DBF |
-     Select-Object Name, Length, LastWriteTime
-   ```
-
-## Inspect
+## 1. Ver el estado
 
 ```powershell
-.\vetter-agent.exe inspect `
-  --dir "\\Srvarchvete01\c\vetter5\Datos" `
-  --out "$env:TEMP\vetter-inspector.json" `
-  --stat CLIENTES.TELEFONO `
-  --stat PACIENTES.CODIGOPACI
+& "C:\ProgramData\vetter-agent\vetter-agent.exe" version
+Get-ScheduledTask -TaskName "Vetter Sync" | Select-Object TaskName, State
+Get-ScheduledTaskInfo -TaskName "Vetter Sync" |
+  Select-Object LastRunTime, LastTaskResult, NextRunTime
+Get-Content "C:\ProgramData\vetter-agent\logs\agent.log" -Tail 40
 ```
 
-Lee el original en modo compartido, no copia nada y no escribe en el origen.
-Si un archivo está bloqueado lo informa en `errors` y sigue con el resto.
+- `LastTaskResult = 0` es una corrida bien.
+- En el log, cada corrida deja una línea `resumen` por tabla con `filas`,
+  `pendientes`, `enviadas`, `ids_duplicados` y `error`.
+- Si no hay cambios en Vetter, `enviadas` es 0: es el objetivo, no una falla.
 
-## Cómo leer el resultado
+## 2. Actualizar
 
-| Campo del JSON | Qué contesta |
-|---|---|
-| `header.language_driver` + `header.encoding` | Codepage real (CP850/CP1252). Es lo que define la decodificación antes del hash. |
-| `records.deleted` | Si Vetter marca borrados con `0x2A`. Si da 0 en una tabla donde se borraron filas, probablemente haga `PACK`: hay que decirlo, no adivinarlo. |
-| `records.header` vs `records.computed_from_size` + `records.match` | Si el archivo es consistente o se copió a mitad de una escritura. |
-| `stats[].lengths` / `separators` de `TELEFONO` | Formato real: cuántos números, con qué separadores, cuántos son solo dígitos. |
-| `stats[].prefix_lengths` de `CODIGOPACI` | Si el prefijo antes de `/` es el código del cliente. |
-| `memo` | Si hay `.FPT` (memos) y cuánto pesa. |
-| `fields` | Nombres, tipos y largos reales, para escribir el parser. |
+La forma normal es la ventana, sin consola:
 
-No interpretes valores de filas: el reporte no los trae.
+```powershell
+$dir = "$env:TEMP\vetter-setup"
+New-Item -ItemType Directory -Force $dir | Out-Null
+Invoke-WebRequest "https://github.com/nevex-labs/vetter-sync/releases/latest/download/vetter-setup.exe" -OutFile "$dir\vetter-setup.exe"
+Start-Process "$dir\vetter-setup.exe" -Verb RunAs
+```
 
-## Reportar
+En la ventana:
 
-1. Llená `docs/informe-visita.md` con los números y las respuestas de las
-   preguntas abiertas (`docs/open-questions.md`).
-2. Pegá el resumen de consola en el chat. El JSON no tiene PII: se puede
-   adjuntar o commitear como evidencia.
-3. Anotá cualquier `errors` con el nombre del archivo y el mensaje, sin
-   intentar arreglarlo.
+1. **Pegar** (solo si hay que parear): lee el portapapeles, lo vacía y limpia
+   espacios, saltos, comillas y BOM.
+2. **Guardar pareo**: valida contra el servidor y cifra con DPAPI. Un 401 no
+   guarda nada.
+3. **Actualizar agente**: baja los dos binarios del release firmado, verifica
+   sha256 y los deja en su lugar.
+4. **Instalar tarea**: abre el instalador y pide cuenta y contraseña de Windows
+   en el diálogo del sistema.
 
-## Lo que no se hace en esta visita
+Si SmartScreen dice "Windows protegió tu PC" (el `.exe` no está firmado con un
+certificado comercial): Más información → Ejecutar de todas formas.
 
-- No `pair`, no `sync`, no tareas programadas.
-- No abrir los DBF con utilidades que escriban.
-- No copiar DBF ni `.FPT` a OneDrive, al repo o al Escritorio.
-- No tocar la configuración de Vetter ni la réplica de OneDrive.
+Fallback por consola, mismo resultado:
 
-## Después, desde esta misma máquina
+```powershell
+powershell -ExecutionPolicy Bypass -File "C:\ProgramData\vetter-agent\instalar-actualizacion.ps1"
+```
 
-Cuando el agente completo esté publicado:
+## 3. Verificar después de actualizar
 
-1. `git pull` en este repo.
-2. En el panel: Equipo → Dispositivos → Conectar PC. Muestra el secreto una vez.
-3. `.\vetter-agent.exe pair` — **el secreto se pega en el prompt, nunca en el
-   chat de Claude Code**.
-4. Instalar la tarea (`docs/pc-runbook.md`), correrla una vez y verificar el
-   `last_seen_at` en el panel.
+```powershell
+Start-ScheduledTask -TaskName "Vetter Sync"
+Start-Sleep -Seconds 90
+Get-ScheduledTaskInfo -TaskName "Vetter Sync" | Select-Object LastTaskResult
+Get-Content "C:\ProgramData\vetter-agent\logs\agent.log" -Tail 60
+```
 
-Si algo falla, el panel muestra `last_seen_at` y `last_error`; los logs locales
-están en `C:\ProgramData\vetter-agent\logs`. No hace falta volver a la PC.
+- `version` tiene que mostrar la última.
+- `LastTaskResult = 0`.
+- No tiene que aparecer `error` en las líneas `resumen`.
+
+## 4. Aviso de copias divergentes (opcional)
+
+Si existe `C:\Users\usuario\OneDrive\BKP Vetter5\Datos` y se agrega al
+`config.json`:
+
+```json
+"mirror_path": "C:\\Users\\usuario\\OneDrive\\BKP Vetter5\\Datos"
+```
+
+cada corrida compara la cantidad de registros de las 5 tablas entre el UNC y
+OneDrive y lo reporta como `mirror: …` en `agent_error`. Lee solo headers: no
+importa datos de la réplica. Que las cantidades coincidan no garantiza que el
+contenido sea igual.
+
+## 5. Reportar (sin PII)
+
+1. Versión antes y después.
+2. Texto literal de lo que dijo la ventana o el script.
+3. `LastTaskResult`.
+4. Las líneas `resumen` del log, tal cual.
+5. Cualquier error, con el mensaje completo y sin nombres ni teléfonos.
+
+## Lo que no se hace
+
+- Abrir los DBF con cualquier cosa que escriba, ni `PACK`, ni reparar.
+- Copiar DBF o `.FPT` a OneDrive, al repo o al Escritorio.
+- Tocar la configuración de Vetter o de OneDrive.
+- Borrar `secret.bin`, `config.json` o el snapshot "para probar".
+- Parear de nuevo si el dispositivo ya está pareado: el secreto es uno solo y
+  se revoca desde el panel.

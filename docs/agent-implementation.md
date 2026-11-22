@@ -143,9 +143,10 @@ Requisito: **anda solo, siempre, y cuando falla se ve.**
   Corre con la cuenta de servicio, sin ventana.
 - Códigos de salida: `0` ok, `1` error de configuración/share/secreto, `2` uso
   incorrecto. Task Scheduler guarda el último código.
-- `vetter-agent status --config ...` imprime, sin red: si el secreto se puede
-  leer, último run, tablas pendientes, tamaño del outbox y último error local.
-  Es lo primero que mira Claude Code cuando algo no anda.
+- `vetter-agent status --config ...` (todavía no existe) debería imprimir, sin
+  red: si el secreto se puede leer, último run, tablas pendientes, tamaño del
+  outbox y último error local. Es lo primero que mira Claude Code cuando algo no
+  anda; hoy se lee con `Get-ScheduledTaskInfo` y el log.
 - Logs en `C:\ProgramData\vetter-agent\logs\agent-AAAA-MM-DD.log`, una línea
   JSON por evento (`ts`, `level`, `msg`, `tabla`, `filas`, `vetter_id`).
   Rotación diaria y borrado a los 7 días. Nunca PII.
@@ -198,15 +199,17 @@ nadie la toque ni abra Claude Code.
 - `413` parte el lote; `401` corta.
 - `go test ./...` y `go vet ./...`.
 
-## Estado (2026-11-18)
+## Estado (2026-11-22)
 
 Implementado: `pair` (consola con `*`, `--clipboard` y `--gui`), `sync` y
 `sync --dry-run`, con copia, parser, hash, snapshot, lotes, 413/401/400/500,
-outbox, heartbeat, `agent_error` y logs diarios. En la PC: pareado, volcado
-inicial completo y tarea `Vetter Sync` cada 15 minutos (ver
-`informe-visita.md`). Pendiente: `status`, auto-update y que el release
-publique también el build sin consola (`-ldflags -H=windowsgui`) que usa la
-tarea.
+outbox, heartbeat, `agent_error` y logs diarios. También `setup` (la ventana de
+instalación), `row_key` para las filas repetidas, el aviso de copias
+divergentes (`mirror_path`) y el auto-update firmado con rollback.
+
+En la PC: pareado, volcado inicial completo y tarea `Vetter Sync` cada 15
+minutos (ver `informe-visita.md`). Pendiente: el comando `status`, y llevar la
+PC de 0.1.1 a la última versión con `vetter-setup.exe` (issue #2).
 
 ## Terminado cuando
 
