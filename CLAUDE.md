@@ -45,7 +45,7 @@ El paso a paso está en:
 ## Si algo falla
 
 1. `Get-ScheduledTaskInfo -TaskName "Vetter Sync"` → `LastTaskResult`.
-2. `Get-Content "C:\ProgramData\vetter-agent\logs\agent.log" -Tail 60`.
+2. `Get-ChildItem "C:\ProgramData\vetter-agent\logs\agent-*.log" | Sort-Object LastWriteTime | Select-Object -Last 1 | Get-Content -Tail 60`.
 3. El panel muestra `last_seen_at` y `last_error` de la PC.
 4. `docs/pc-runbook.md` tiene la tabla de diagnóstico.
 

@@ -147,7 +147,7 @@ Invoke-RestMethod -Uri "https://veterinariagachens.nevexlabs.workers.dev/api/syn
 Get-ScheduledTaskInfo -TaskName "Vetter Sync"
 
 # Log (sin PII: conteos y vetter_id)
-Get-Content "C:\ProgramData\vetter-agent\logs\agent.log" -Tail 30
+Get-ChildItem "C:\ProgramData\vetter-agent\logs\agent-*.log" | Sort-Object LastWriteTime | Select-Object -Last 1 | Get-Content -Tail 60
 ```
 
 ## Inspector (primera visita)

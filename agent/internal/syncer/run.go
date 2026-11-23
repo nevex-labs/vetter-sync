@@ -33,7 +33,11 @@ type TableReport struct {
 // Summary es el resultado de una corrida.
 type Summary struct {
 	Tables []TableReport
+	// Errors son fallas: la corrida sale con 1.
 	Errors []string
+	// Warnings van al panel igual que los errores, pero no cambian el código de
+	// salida: la copia divergente es crónica y no rompe el sync.
+	Warnings []string
 }
 
 // Runner arma y manda los lotes. Client es nil en --dry-run.
@@ -81,10 +85,11 @@ func (r *Runner) Run(ctx context.Context) (Summary, error) {
 
 	serverDown = state.serverDown
 
-	// Divergencia entre el UNC y lo que escribe el Vetter de esta PC. No corta
-	// la corrida: viaja en agent_error para que se vea en el panel.
+	// Divergencia entre el UNC y lo que escribe el Vetter de esta PC. Va como
+	// aviso: se ve en el panel y no hace fallar la corrida, porque la divergencia
+	// es crónica hasta que la clínica cambie dónde escribe Vetter.
 	if r.Config.MirrorPath != "" {
-		summary.Errors = append(summary.Errors, mirrorDifferences(r.Config.ZPath, r.Config.MirrorPath)...)
+		summary.Warnings = append(summary.Warnings, mirrorDifferences(r.Config.ZPath, r.Config.MirrorPath)...)
 	}
 
 	if r.DryRun {
@@ -93,7 +98,7 @@ func (r *Runner) Run(ctx context.Context) (Summary, error) {
 
 	if serverDown {
 		summary.Errors = append(summary.Errors, "servidor o red caídos: pendientes en el outbox")
-	} else if err := r.heartbeat(ctx, summary.Errors); err != nil {
+	} else if err := r.heartbeat(ctx, append(summary.Errors, summary.Warnings...)); err != nil {
 		return summary, r.finish(&snap, err)
 	}
 

@@ -229,6 +229,10 @@ func dryRunCommand(ctx context.Context, cfg syncer.Config, logger *slog.Logger) 
 
 	fmt.Printf("\nOutbox: %d lotes pendientes\n", syncer.OutboxSize(cfg.CopyDir))
 
+	for _, warning := range summary.Warnings {
+		fmt.Printf("Aviso: %s\n", warning)
+	}
+
 	if len(summary.Errors) > 0 {
 		return exitError
 	}
@@ -289,8 +293,9 @@ func realSync(ctx context.Context, cfg syncer.Config, logger *slog.Logger) int {
 			"confirmadas", table.Confirmed, "sin_cambios", table.Unchanged, "error", table.Error)
 	}
 
-	// Llegar acá con la corrida hecha confirma que la versión instalada corre.
-	writeCounter(filepath.Join(dir, "update.attempts"), 0)
+	for _, warning := range summary.Warnings {
+		logger.Warn("aviso", "detalle", warning)
+	}
 
 	// Llegar acá con la corrida hecha confirma que la versión instalada corre.
 	writeCounter(filepath.Join(dir, "update.attempts"), 0)

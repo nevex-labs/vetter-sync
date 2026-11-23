@@ -131,6 +131,28 @@ func newFixture(t *testing.T) *fixture {
 	}
 }
 
+func TestMirrorDivergenceIsWarningNotError(t *testing.T) {
+	t.Parallel()
+
+	fx := newFixture(t)
+	fx.runner.Config.MirrorPath = t.TempDir()
+
+	summary, err := fx.runner.Run(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(summary.Warnings) == 0 {
+		t.Error("la réplica vacía tiene que dejar un aviso")
+	}
+
+	for _, problem := range summary.Errors {
+		if strings.HasPrefix(problem, "mirror:") {
+			t.Errorf("la divergencia no puede ser un error: %q", problem)
+		}
+	}
+}
+
 func TestRunTwiceSecondSendsNothing(t *testing.T) {
 	t.Parallel()
 

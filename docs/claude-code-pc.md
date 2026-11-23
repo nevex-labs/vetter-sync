@@ -13,13 +13,18 @@ UNC `\\Srvarchvete01\c\vetter5\Datos`; nunca la réplica de OneDrive.
 Get-ScheduledTask -TaskName "Vetter Sync" | Select-Object TaskName, State
 Get-ScheduledTaskInfo -TaskName "Vetter Sync" |
   Select-Object LastRunTime, LastTaskResult, NextRunTime
-Get-Content "C:\ProgramData\vetter-agent\logs\agent.log" -Tail 40
+Get-ChildItem "C:\ProgramData\vetter-agent\logs\agent-*.log" | Sort-Object LastWriteTime | Select-Object -Last 1 | Get-Content -Tail 60
 ```
 
-- `LastTaskResult = 0` es una corrida bien.
+- `LastTaskResult = 0` es una corrida bien. `267009` es "sigue corriendo":
+  esperar, no es una falla. `267011` es "nunca corrió". `1` es error del
+  agente: mirar el log. `0x8007052E` es cuenta o contraseña incorrecta.
 - En el log, cada corrida deja una línea `resumen` por tabla con `filas`,
-  `pendientes`, `enviadas`, `ids_duplicados` y `error`.
-- Si no hay cambios en Vetter, `enviadas` es 0: es el objetivo, no una falla.
+  `pendientes`, `confirmadas`, `sin_cambios` y `error`. Los `ids_duplicados`
+  salen en la línea `tabla leída`, no en `resumen`.
+- La línea `heartbeat` con `received` y `agent_error` es la prueba de que el
+  Worker respondió. Es lo más cercano al panel que hay en la PC.
+- Si no hay cambios en Vetter, `pendientes` es 0: es el objetivo, no una falla.
 
 ## 2. Actualizar
 
@@ -55,15 +60,32 @@ powershell -ExecutionPolicy Bypass -File "C:\ProgramData\vetter-agent\instalar-a
 ## 3. Verificar después de actualizar
 
 ```powershell
+# Qué binario corre la tarea y con qué cuenta
+(Get-ScheduledTask -TaskName "Vetter Sync").Principal | Select-Object UserId, LogonType, RunLevel
+Get-FileHash "C:\ProgramData\vetter-agent\vetter-agent-task.exe" -Algorithm SHA256
+& "C:\ProgramData\vetter-agent\vetter-agent.exe" version
+
+# Una corrida y su resultado
 Start-ScheduledTask -TaskName "Vetter Sync"
-Start-Sleep -Seconds 90
-Get-ScheduledTaskInfo -TaskName "Vetter Sync" | Select-Object LastTaskResult
-Get-Content "C:\ProgramData\vetter-agent\logs\agent.log" -Tail 60
+for ($i = 0; $i -lt 30; $i++) {
+    Start-Sleep -Seconds 10
+    $info = Get-ScheduledTaskInfo -TaskName "Vetter Sync"
+    if ($info.LastTaskResult -ne 267009) { break }
+}
+$info | Select-Object LastRunTime, LastTaskResult
+Get-ChildItem "C:\ProgramData\vetter-agent\logs\agent-*.log" | Sort-Object LastWriteTime | Select-Object -Last 1 | Get-Content -Tail 60
 ```
 
-- `version` tiene que mostrar la última.
-- `LastTaskResult = 0`.
-- No tiene que aparecer `error` en las líneas `resumen`.
+- La tarea ejecuta `vetter-agent-task.exe`, no `vetter-agent.exe`: el `version`
+  prueba el binario de consola, el hash del task exe prueba el que corre.
+- El hash tiene que coincidir con `task_sha256` del manifiesto del release.
+- `LogonType` pasa de `Interactive` a `Password` cuando la tarea corre sin
+  sesión.
+- `LastTaskResult = 0`; `267009` es "sigue corriendo", no una falla.
+- `LastRunTime` tiene que ser posterior a la actualización: si no, se está
+  leyendo la corrida de la versión vieja.
+- No tiene que aparecer `error` en las líneas `resumen`, ni `contrato distinto`
+  ni `401`.
 
 ## 4. Aviso de copias divergentes (opcional)
 

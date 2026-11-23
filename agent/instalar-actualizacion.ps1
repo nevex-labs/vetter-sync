@@ -58,9 +58,15 @@ foreach ($pair in @(@('vetter-agent.exe', $newConsole), @('vetter-agent-task.exe
 }
 
 Start-ScheduledTask -TaskName $task
-Start-Sleep -Seconds 60
+
+# 267009 = sigue corriendo: se espera hasta 5 minutos en vez de asumir que falló.
+for ($i = 0; $i -lt 30; $i++) {
+    Start-Sleep -Seconds 10
+    $info = Get-ScheduledTaskInfo -TaskName $task
+    if ($info.LastTaskResult -ne 267009) { break }
+}
 
 Write-Host "Version nueva: $(& (Join-Path $dir 'vetter-agent.exe') version)"
 Get-ScheduledTaskInfo -TaskName $task | Select-Object LastRunTime, LastTaskResult, NextRunTime
 
-Write-Host 'Listo. Si LastTaskResult no es 0, mirar C:\ProgramData\vetter-agent\logs\agent.log'
+Write-Host 'Listo. Si LastTaskResult no es 0, mirar el log de hoy en C:\ProgramData\vetter-agent\logs'

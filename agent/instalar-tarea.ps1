@@ -37,5 +37,10 @@ Register-ScheduledTask -TaskName 'Vetter Sync' `
     -User $cred.UserName -Password $cred.GetNetworkCredential().Password -RunLevel Limited -Force
 
 Start-ScheduledTask -TaskName 'Vetter Sync'
-Start-Sleep -Seconds 60
+
+for ($i = 0; $i -lt 30; $i++) {
+    Start-Sleep -Seconds 10
+    $info = Get-ScheduledTaskInfo -TaskName 'Vetter Sync'
+    if ($info.LastTaskResult -ne 267009) { break }
+}
 Get-ScheduledTaskInfo -TaskName 'Vetter Sync' | Select-Object LastRunTime, LastTaskResult, NextRunTime
