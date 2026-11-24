@@ -53,6 +53,8 @@ func main() {
 		os.Exit(setupCommand(os.Args[2:]))
 	case "attachments":
 		os.Exit(attachmentsCommand(os.Args[2:]))
+	case "files":
+		os.Exit(filesCommand(os.Args[2:]))
 	case "sync":
 		os.Exit(syncCommand(os.Args[2:]))
 	default:
@@ -68,6 +70,7 @@ func usage() {
   pair    [--config <config.json>] [--gui | --clipboard]
   setup   [--config <config.json>]      (ventana de instalación, Windows)
   attachments --dir <ruta> [--mirror <ruta>] [--out attachments.json]
+  files   --dir <ruta> [--days 90] [--max-mb 20] [--limit 20] [--dry-run]
   sync    --config <config.json> [--dry-run]
   version`)
 }
