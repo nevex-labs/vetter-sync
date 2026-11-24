@@ -3,6 +3,7 @@ package syncer
 import (
 	"context"
 	"errors"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -88,6 +89,36 @@ func TestClientPing(t *testing.T) {
 	contract, err := client.Ping(context.Background())
 	if err != nil || contract != Contract {
 		t.Errorf("contract = %d, err = %v", contract, err)
+	}
+}
+
+func TestSendMandaLaVersion(t *testing.T) {
+	t.Parallel()
+
+	var body string
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		data, _ := io.ReadAll(r.Body)
+		body = string(data)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"received":0}`))
+	}))
+	t.Cleanup(server.Close)
+
+	client := &Client{
+		Endpoint:  server.URL,
+		Secret:    "vgs_test",
+		UserAgent: "vetter-agent/test",
+		Version:   "0.3.3",
+		HTTP:      server.Client(),
+	}
+
+	if _, err := client.Send(context.Background(), Batch{}); err != nil {
+		t.Fatal(err)
+	}
+
+	if !strings.Contains(body, `"agent_version":"0.3.3"`) {
+		t.Errorf("el lote no lleva la versión: %s", body)
 	}
 }
 

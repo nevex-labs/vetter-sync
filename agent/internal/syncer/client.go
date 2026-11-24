@@ -41,8 +41,9 @@ type Row struct {
 
 // Batch es el body del POST. Un lote sin filas es el heartbeat.
 type Batch struct {
-	Rows       []Row  `json:"rows"`
-	AgentError string `json:"agent_error,omitempty"`
+	Rows         []Row  `json:"rows"`
+	AgentError   string `json:"agent_error,omitempty"`
+	AgentVersion string `json:"agent_version,omitempty"`
 }
 
 // Response son los conteos que devuelve el Worker.
@@ -61,7 +62,9 @@ type Client struct {
 	Endpoint  string
 	Secret    string
 	UserAgent string
-	HTTP      *http.Client
+	// Version va en cada lote: el panel muestra qué versión corre cada PC.
+	Version string
+	HTTP    *http.Client
 	// Backoff son las esperas entre reintentos ante 500 o error de red. Su
 	// largo es la cantidad de reintentos.
 	Backoff []time.Duration
@@ -131,6 +134,10 @@ func EncodeBatch(batch Batch) ([]byte, error) {
 // Send manda un lote. Reintenta con backoff ante 500 o error de red; 400, 401
 // y 413 vuelven enseguida porque reintentar no los arregla.
 func (c *Client) Send(ctx context.Context, batch Batch) (Response, error) {
+	if batch.AgentVersion == "" {
+		batch.AgentVersion = c.Version
+	}
+
 	body, err := EncodeBatch(batch)
 	if err != nil {
 		return Response{}, err

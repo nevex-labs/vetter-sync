@@ -32,6 +32,7 @@ func newClient(cfg syncer.Config, token string) *syncer.Client {
 		Endpoint:  cfg.Endpoint,
 		Secret:    token,
 		UserAgent: fmt.Sprintf("vetter-agent/%s (%s)", version, cfg.InstallID),
+		Version:   version,
 		HTTP:      &http.Client{Timeout: 60 * time.Second},
 		Backoff:   syncer.DefaultBackoff(),
 	}
