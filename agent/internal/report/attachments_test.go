@@ -42,7 +42,7 @@ func TestScanAttachments(t *testing.T) {
 		{Values: []string{"1", "estudio.pdf"}},
 	})
 
-	result, err := ScanAttachments(source, mirror)
+	result, err := ScanAttachments(source, mirror, nil)
 	if err != nil {
 		t.Fatal(err)
 	}

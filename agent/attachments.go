@@ -19,6 +19,10 @@ func attachmentsCommand(args []string) int {
 	mirror := flags.String("mirror", "", "copia de OneDrive (opcional)")
 	out := flags.String("out", "attachments.json", "archivo JSON de salida")
 
+	var folders statList
+
+	flags.Var(&folders, "folder", "carpeta extra donde pueden estar los archivos (repetible)")
+
 	if err := flags.Parse(args); err != nil {
 		return exitUsage
 	}
@@ -28,7 +32,7 @@ func attachmentsCommand(args []string) int {
 		return exitUsage
 	}
 
-	result, err := report.ScanAttachments(*dir, *mirror)
+	result, err := report.ScanAttachments(*dir, *mirror, folders)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 

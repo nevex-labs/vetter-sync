@@ -18,6 +18,7 @@ type AttachmentTable struct {
 	WithoutPath  int            `json:"sin_ruta"`
 	InSource     int            `json:"en_unc"`
 	InMirrorOnly int            `json:"solo_en_onedrive"`
+	InExtra      int            `json:"en_carpeta_extra"`
 	InBoth       int            `json:"en_los_dos"`
 	Missing      int            `json:"no_aparece"`
 	TotalBytes   int64          `json:"bytes_totales"`
@@ -33,14 +34,15 @@ type AttachmentTable struct {
 type AttachmentReport struct {
 	Dir    string                     `json:"dir"`
 	Mirror string                     `json:"mirror,omitempty"`
+	Extras []string                   `json:"carpetas_extra,omitempty"`
 	Tables map[string]AttachmentTable `json:"tables"`
 }
 
 // ScanAttachments cuenta los archivos que referencian ADJUNTOS y FOTOS y si
-// existen en la fuente (UNC) y en la réplica (OneDrive). Solo agrega: no
-// devuelve rutas, títulos ni valores de campo.
-func ScanAttachments(dir, mirror string) (AttachmentReport, error) {
-	out := AttachmentReport{Dir: dir, Mirror: mirror, Tables: map[string]AttachmentTable{}}
+// existen en la fuente (UNC), en la réplica (OneDrive) o en una carpeta extra.
+// Solo agrega: no devuelve rutas, títulos ni valores de campo.
+func ScanAttachments(dir, mirror string, extras []string) (AttachmentReport, error) {
+	out := AttachmentReport{Dir: dir, Mirror: mirror, Extras: extras, Tables: map[string]AttachmentTable{}}
 
 	for _, table := range []string{"ADJUNTOS", "FOTOS"} {
 		path, err := findDBF(dir, table)
@@ -48,7 +50,7 @@ func ScanAttachments(dir, mirror string) (AttachmentReport, error) {
 			return out, err
 		}
 
-		stats, err := scanTable(path, dir, mirror)
+		stats, err := scanTable(path, dir, mirror, extras)
 		if err != nil {
 			return out, err
 		}
@@ -59,7 +61,7 @@ func ScanAttachments(dir, mirror string) (AttachmentReport, error) {
 	return out, nil
 }
 
-func scanTable(path, dir, mirror string) (AttachmentTable, error) {
+func scanTable(path, dir, mirror string, extras []string) (AttachmentTable, error) {
 	stats := AttachmentTable{Buckets: map[string]int{}, Extensions: map[string]int{}}
 
 	var sizes []int64
@@ -90,29 +92,27 @@ func scanTable(path, dir, mirror string) (AttachmentTable, error) {
 
 		stats.Extensions[extension(raw)]++
 
-		sourceSize, sourceErr := sizeIn(dir, raw)
-		mirrorSize, mirrorErr := sizeIn(mirror, raw)
-
-		switch {
-		case sourceErr == nil && mirrorErr == nil:
-			stats.InBoth++
-		case sourceErr == nil:
-			stats.InSource++
-		case mirrorErr == nil:
-			stats.InMirrorOnly++
-		default:
+		size, where, err := locate(dir, mirror, extras, raw)
+		if err != nil {
 			stats.Missing++
-
-			if !isNotExist(sourceErr) {
-				stats.Unreadable++
-			}
+			stats.Unreadable++
 
 			return nil
 		}
 
-		size := sourceSize
-		if sourceErr != nil {
-			size = mirrorSize
+		switch where {
+		case "ambos":
+			stats.InBoth++
+		case "unc":
+			stats.InSource++
+		case "onedrive":
+			stats.InMirrorOnly++
+		case "extra":
+			stats.InExtra++
+		default:
+			stats.Missing++
+
+			return nil
 		}
 
 		stats.TotalBytes += size
@@ -168,8 +168,28 @@ func sizeIn(root, raw string) (int64, error) {
 	return 0, last
 }
 
-func isNotExist(err error) bool {
-	return err != nil && os.IsNotExist(err)
+// locate busca la ruta relativa en la fuente, la réplica y las carpetas extra.
+// Devuelve el tamaño y dónde apareció. `err` solo si no aparece en ninguna.
+func locate(dir, mirror string, extras []string, raw string) (int64, string, error) {
+	sourceSize, sourceErr := sizeIn(dir, raw)
+	mirrorSize, mirrorErr := sizeIn(mirror, raw)
+
+	switch {
+	case sourceErr == nil && mirrorErr == nil:
+		return sourceSize, "ambos", nil
+	case sourceErr == nil:
+		return sourceSize, "unc", nil
+	case mirrorErr == nil:
+		return mirrorSize, "onedrive", nil
+	}
+
+	for _, extra := range extras {
+		if size, err := sizeIn(extra, raw); err == nil {
+			return size, "extra", nil
+		}
+	}
+
+	return 0, "falta", os.ErrNotExist
 }
 
 func extension(path string) string {
