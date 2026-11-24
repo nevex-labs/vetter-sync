@@ -117,9 +117,12 @@ Vectores para testear la implementación:
 
 ## Snapshot
 
-Un JSON `{"TABLA|vetter_id": "hash"}` con escritura atómica (temp + rename).
-Primera corrida: vacío, manda todo. Las siguientes: solo lo que cambió. Guardar
-también `(size, mtime)` por archivo para saltear tablas sin cambios.
+Un JSON `{"TABLA|row_key": "hash"}` con escritura atómica (temp + rename).
+Primera corrida: vacío, manda todo. Las siguientes: solo lo que cambió. Guarda
+también `(size, mtime)` por archivo para saltear tablas sin cambios, y la
+versión del agente: si cambió, la próxima corrida lee todas las tablas una vez.
+Sin eso, una clave nueva (`id#2`) en una tabla sin cambios no se manda hasta que
+Vetter toque ese DBF.
 
 ## Sync
 

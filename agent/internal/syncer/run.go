@@ -43,9 +43,12 @@ type Summary struct {
 // Runner arma y manda los lotes. Client es nil en --dry-run.
 type Runner struct {
 	Config Config
-	Client *Client
-	Logger *slog.Logger
-	DryRun bool
+	// Version es la del binario: si cambia, la próxima corrida lee todas las
+	// tablas aunque los DBF no hayan cambiado.
+	Version string
+	Client  *Client
+	Logger  *slog.Logger
+	DryRun  bool
 }
 
 // Run hace una corrida completa. Devuelve error solo si hay que cortar
@@ -82,6 +85,10 @@ func (r *Runner) Run(ctx context.Context) (Summary, error) {
 			return summary, r.finish(&snap, err)
 		}
 	}
+
+	// Las tablas se leyeron con esta versión: la próxima corrida puede volver a
+	// confiar en los mtime.
+	snap.Version = r.Version
 
 	serverDown = state.serverDown
 
@@ -175,7 +182,7 @@ func (r *Runner) prepare(table string, snap *Snapshot) (TableReport, []Row, *Fil
 		return report, nil, nil
 	}
 
-	if !r.DryRun {
+	if !r.DryRun && snap.Version == r.Version {
 		if stamp, err := stampOf(src); err == nil && snap.Files[table] == stamp {
 			report.Unchanged = true
 			r.Logger.Info("tabla sin cambios", "tabla", table)

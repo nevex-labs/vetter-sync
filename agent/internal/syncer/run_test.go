@@ -153,6 +153,54 @@ func TestMirrorDivergenceIsWarningNotError(t *testing.T) {
 	}
 }
 
+func TestVersionChangeForcesRead(t *testing.T) {
+	t.Parallel()
+
+	fx := newFixture(t)
+	fx.runner.Version = "0.3.2"
+
+	ctx := context.Background()
+
+	if _, err := fx.runner.Run(ctx); err != nil {
+		t.Fatal(err)
+	}
+
+	snap, err := LoadSnapshot(fx.runner.Config.Snapshot)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if snap.Version != "0.3.2" {
+		t.Errorf("snapshot version = %q", snap.Version)
+	}
+
+	// Misma versión y mismos mtime: las tablas se saltean.
+	second, err := fx.runner.Run(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for _, table := range second.Tables {
+		if table.Table == "CLIENTES" && !table.Unchanged {
+			t.Errorf("CLIENTES tenía que saltearse: %+v", table)
+		}
+	}
+
+	// Versión nueva: se leen todas, aunque el DBF no haya cambiado.
+	fx.runner.Version = "0.3.3"
+
+	third, err := fx.runner.Run(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for _, table := range third.Tables {
+		if table.Table == "CLIENTES" && (table.Unchanged || table.Rows == 0) {
+			t.Errorf("con otra versión CLIENTES tenía que leerse: %+v", table)
+		}
+	}
+}
+
 func TestRunTwiceSecondSendsNothing(t *testing.T) {
 	t.Parallel()
 

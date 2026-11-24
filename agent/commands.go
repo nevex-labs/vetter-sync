@@ -205,7 +205,7 @@ func openLogger(dir string) (*slog.Logger, func()) {
 }
 
 func dryRunCommand(ctx context.Context, cfg syncer.Config, logger *slog.Logger) int {
-	runner := syncer.Runner{Config: cfg, Logger: logger, DryRun: true}
+	runner := syncer.Runner{Config: cfg, Version: version, Logger: logger, DryRun: true}
 
 	summary, err := runner.Run(ctx)
 	if err != nil {
@@ -280,7 +280,7 @@ func realSync(ctx context.Context, cfg syncer.Config, logger *slog.Logger) int {
 		return exitError
 	}
 
-	runner := syncer.Runner{Config: cfg, Client: client, Logger: logger}
+	runner := syncer.Runner{Config: cfg, Version: version, Client: client, Logger: logger}
 
 	summary, err := runner.Run(ctx)
 	if err != nil {

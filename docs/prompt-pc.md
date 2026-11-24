@@ -11,7 +11,7 @@ mínimos; el resto de las paradas están en la tabla de abajo.
 
 ```text
 Sos Claude Code en la PC de la veterinaria (Windows). Objetivo de esta visita:
-dejar el agente de Vetter en la versión 0.3.1 y la tarea "Vetter Sync"
+dejar el agente de Vetter en la versión 0.3.2 y la tarea "Vetter Sync"
 corriendo sin sesión iniciada.
 
 ANTES DE EMPEZAR
@@ -19,7 +19,7 @@ ANTES DE EMPEZAR
   este prompt igual: tiene los comandos y las paradas.
 - Leé docs/claude-code-pc.md. Si el doc y este prompt no coinciden, gana este
   prompt. Si un comando del doc falla, PARÁ y reportá; no lo arregles.
-- La versión esperada es 0.3.1, literal. Si la PC ya la tiene, salteá
+- La versión esperada es 0.3.2, literal. Si la PC ya la tiene, salteá
   "Actualizar agente" y andá directo a verificar la tarea.
 
 REGLAS
@@ -50,7 +50,7 @@ PASOS
    Start-Process "$dir\vetter-setup.exe" -Verb RunAs
 
    Si aparece SmartScreen: Más información → Ejecutar de todas formas.
-   En la ventana: "Actualizar agente". Tiene que decir "Actualizado a 0.3.1" y
+   En la ventana: "Actualizar agente". Tiene que decir "Actualizado a 0.3.2" y
    "listo" para los dos binarios. Si dice "Ya está la última versión", seguí.
 
 3. Tarea (solo si LogonType no es "Password"):
@@ -76,7 +76,7 @@ PARADAS (no adivines; si cae acá, reportá y esperá)
 - 267011: nunca corrió. Revisá que la tarea esté habilitada y reportá.
 - 0x8007052E: cuenta o contraseña incorrecta. No reintentes.
 - 1: error del agente. Leé el log y reportá la línea.
-- Versión más nueva que 0.3.1: PARÁ y reportá; no downgradees.
+- Versión más nueva que 0.3.2: PARÁ y reportá; no downgradees.
 - "contrato distinto" o 401 en el log: PARÁ; no toques el secreto.
 - "el DBF cambió durante la copia": aviso, no parar; la corrida siguiente lo
   reintenta.
@@ -84,7 +84,7 @@ PARADAS (no adivines; si cae acá, reportá y esperá)
 
 REPORTE (sin PII; bloques con etiquetas, log literal al final)
 pc:
-version_antes: / version_despues: / version_esperada: 0.3.1
+version_antes: / version_despues: / version_esperada: 0.3.2
 task_exe_sha256_ok: sí|no
 tarea: UserId= LogonType= LastRunTime= LastTaskResult=
 ventana_o_script: <texto literal>

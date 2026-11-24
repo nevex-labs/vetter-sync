@@ -16,11 +16,18 @@ type FileStamp struct {
 }
 
 // Snapshot es el estado confirmado por el Worker: el hash de cada fila
-// ("TABLA|vetter_id") y el (size, mtime) del DBF de la última tabla que quedó
-// completa.
+// ("TABLA|row_key"), el (size, mtime) del DBF de la última tabla que quedó
+// completa y la versión del agente que lo llenó.
+//
+// La versión importa: cuando el agente cambia la forma de nombrar las filas
+// (`row_key`), las claves nuevas no están en el snapshot y una tabla sin cambios
+// no se lee, así que esas filas quedarían sin mandar hasta que Vetter toque el
+// DBF. Con la versión guardada, la primera corrida después de un upgrade lee
+// todas las tablas una vez.
 type Snapshot struct {
-	Rows  map[string]string    `json:"rows"`
-	Files map[string]FileStamp `json:"files"`
+	Version string               `json:"version"`
+	Rows    map[string]string    `json:"rows"`
+	Files   map[string]FileStamp `json:"files"`
 }
 
 func rowKey(table, vetterID string) string {
