@@ -7,6 +7,11 @@ on:
   pull_request:
     paths: ["agent/**", ".github/workflows/ci.yml"]
 
+# Un push nuevo a un PR cancela la corrida anterior; en la rama principal nunca.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   agent:
     runs-on: ubuntu-latest
